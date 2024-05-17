@@ -14,7 +14,6 @@ export default function parseWahlbereicheTable(table: HTMLTableElement): Wahlber
     if (child.childElementCount < 2) {
       const header = child.children[0].innerHTML;
       if (header == "Pflichtbestandteile") {
-        // TODO fix
         let count = 0;
         for (let j = i + 1; j < rowCandidateCount; j++) {
           const child2 = table.children[j] as HTMLTableRowElement;
