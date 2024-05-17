@@ -14,9 +14,9 @@ export default function parseWahlbereicheTable(table: HTMLTableElement): Wahlber
         // TODO fix
         let count = 0;
         for (let j = i + 1; j < rowCandidateCount; j++) {
-          const child = table.children[i] as HTMLTableRowElement;
-          if (child.tagName.toLowerCase() != "tr") continue;
-          if (child.childElementCount < 2) break;
+          const child2 = table.children[j] as HTMLTableRowElement;
+          if (child2.tagName.toLowerCase() != "tr") continue;
+          if (child2.childElementCount < 2) break;
           count++;
         }
         wahlbereiche.push({
