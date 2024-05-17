@@ -3,7 +3,9 @@ import DomParser from "../domParser";
 import { getMetadataRow, getVerantwortlicher } from "./ModulTeilleistungCommon";
 import Teilleistung, { TeilleistungMetadata } from "../model/Teilleistung";
 
-export default function parseTeilleistungen(container: HTMLElement): Teilleistung[] {
+export default function parseTeilleistungen(
+  container: HTMLElement
+): Teilleistung[] {
   const children = new DomParser(container).getAllChildren();
   const result: Teilleistung[] = [];
   for (let i = 0; i < children.length; i++) {
@@ -24,7 +26,7 @@ export default function parseTeilleistungen(container: HTMLElement): Teilleistun
         name,
         id,
         verantwortlicher,
-        ...metadata
+        ...metadata,
       });
     }
   }
