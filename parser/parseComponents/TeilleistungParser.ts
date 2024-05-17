@@ -1,16 +1,15 @@
 import { HTMLElement, HTMLTableElement } from "happy-dom";
 import DomParser from "../domParser";
-import Module, { ModuleMetadata } from "../model/Module";
-import parseWahlbereicheTable from "./WahlbereicheParser";
 import { getMetadataRow, getVerantwortlicher } from "./ModulTeilleistungCommon";
+import Teilleistung, { TeilleistungMetadata } from "../model/Teilleistung";
 
-export default function parseModule(container: HTMLElement): Module[] {
+export default function parseTeilleistungen(container: HTMLElement): Teilleistung[] {
   const children = new DomParser(container).getAllChildren();
-  const result: Module[] = [];
+  const result: Teilleistung[] = [];
   for (let i = 0; i < children.length; i++) {
     const child = children[i];
-    if (child.classList.contains("moduleheader")) {
-      let r = /Modul: ([^[]+) +\[([A-Z-0-9]+)\]/.exec(
+    if (child.classList.contains("brickheader")) {
+      let r = /Teilleistung: ([^[]+) +\[([A-Z-0-9]+) *\]/.exec(
         child.children[0].innerHTML
       );
       if (!r)
@@ -21,27 +20,21 @@ export default function parseModule(container: HTMLElement): Module[] {
         children[i + 1] as HTMLTableElement
       );
       const metadata = getMetadata(children[i + 2]);
-      const wahlbereiche = parseWahlbereicheTable(
-        children[i + 3] as HTMLTableElement
-      );
       result.push({
         name,
         id,
         verantwortlicher,
-        wahlbereiche,
-        ...metadata,
-        link: "",
+        ...metadata
       });
     }
   }
   return result;
 }
 
-function getMetadata(container: HTMLElement): ModuleMetadata {
+function getMetadata(container: HTMLElement): TeilleistungMetadata {
   return {
-    lp: Number(getMetadataRow(container.children[0])),
-    turnus: getMetadataRow(container.children[2]),
-    dauer: Number(getMetadataRow(container.children[3]).split(" ")[0]),
-    sprache: getMetadataRow(container.children[4]),
+    teilleistungsart: getMetadataRow(container.children[0]),
+    lp: Number(getMetadataRow(container.children[1])),
+    turnus: getMetadataRow(container.children[3]),
   };
 }
