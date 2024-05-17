@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "fetch": "tsx index.ts"
+    "parse": "tsx index.ts"
   },
   "author": "Kr0nox",
   "license": "MIT",

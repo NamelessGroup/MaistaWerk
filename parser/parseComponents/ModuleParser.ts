@@ -4,6 +4,9 @@ import Module, { ModuleMetadata } from "../../model/Module";
 import parseWahlbereicheTable from "./WahlbereicheParser";
 import { getMetadataRow, getVerantwortlicher } from "./ModulTeilleistungCommon";
 
+/**
+ * @param container Container containing all the divs that represent modules
+ */
 export default function parseModule(container: HTMLElement): Module[] {
   const children = new DomParser(container).getAllChildren();
   const result: Module[] = [];
@@ -37,6 +40,9 @@ export default function parseModule(container: HTMLElement): Module[] {
   return result;
 }
 
+/**
+ * @param container div containing the rows of metadata 
+ */
 function getMetadata(container: HTMLElement): ModuleMetadata {
   return {
     lp: Number(getMetadataRow(container.children[0])),

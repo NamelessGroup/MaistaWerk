@@ -1,6 +1,9 @@
 import Wahlbereich from "../../model/Wahlbereich";
 import {HTMLTableElement} from 'happy-dom'
 
+/**
+ * Extracts a list of Wahlbereiche from the table
+ */
 export default function parseWahlbereicheTable(table: HTMLTableElement): Wahlbereich[] {
   const wahlbereiche: Wahlbereich[] = [];
   let rowCandidateCount = table.childElementCount;
@@ -37,7 +40,10 @@ export default function parseWahlbereicheTable(table: HTMLTableElement): Wahlber
   return wahlbereiche;
 }
 
-function parseWahlbereichHeader(header: string) {
+/**
+ * Parses the header of a wahlbereich and returns the base object of this wahlbereich with the given restrictions
+ */
+function parseWahlbereichHeader(header: string): Wahlbereich {
   const r = /([^(]+) \(Wahl: ([^)]*)\)/.exec(header);
   if (!r) throw "Could not parse header: " + header;
 
@@ -109,6 +115,9 @@ function parseWahlbereichHeader(header: string) {
   throw "Could no parse Restrictions: " + wahlbereicheText + " \"" + wahlbereicheText + "\"";
 }
 
+/**
+ * Gets the id from a table row
+ */
 function getModulId(row: HTMLTableRowElement) {
   return row.children[0].innerHTML;
 }

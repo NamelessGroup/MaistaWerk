@@ -34,8 +34,8 @@ console.log(`Fetched content in ${postFetchTime - startTime}ms`);
 
 console.log("Parsing Fach list...");
 const fachListeStart =
-  bodyParser.findChildIdOfHeading(STRUCTURE_TABLE_HEADING) + 2;
-const fachListeEnd = bodyParser.findChildIdOfHeading(MODULE_HEADING);
+  bodyParser.findChildIndexOfHeading(STRUCTURE_TABLE_HEADING) + 2;
+const fachListeEnd = bodyParser.findChildIndexOfHeading(MODULE_HEADING);
 const fachListe = bodyParser
   .publicGetChildRange(fachListeStart, fachListeEnd)
   .map(parseFach);
@@ -53,13 +53,11 @@ const postParseFachlisteTime = Date.now();
 console.log(`Parsed Fach list in ${postParseFachlisteTime - postFetchTime}ms`);
 
 console.log("Parsing Modul list...");
-const module = parseModule(bodyParser.getChildAtId(fachListeEnd + 1));
+const module = parseModule(bodyParser.getChildAtIndex(fachListeEnd + 1));
 const postModuleParseTime = Date.now();
 console.log(
   `Parsed Modul list in ${postModuleParseTime - postParseFachlisteTime}ms`
 );
-
-//console.log(module[module.length-1])
 
 console.log("Parsing Teilleistungs list...");
 const teilleistungen = parseTeilleistungen(
@@ -69,7 +67,6 @@ const postTeilleistungParseTime = Date.now();
 console.log(
   `Parsed Teilleistungs list in ${postTeilleistungParseTime - postModuleParseTime}ms`
 );
-//console.log(teilleistungen[teilleistungen.length-1])
 
 console.log("Start writing files...");
 writeToFile(vertiefungsfacher, [

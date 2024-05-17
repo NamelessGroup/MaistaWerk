@@ -3,6 +3,9 @@ import DomParser from "../domParser";
 import { getMetadataRow, getVerantwortlicher } from "./ModulTeilleistungCommon";
 import Teilleistung, { TeilleistungMetadata } from "../../model/Teilleistung";
 
+/**
+ * @param container Container containing all the divs that represent teilleistungen
+ */
 export default function parseTeilleistungen(
   container: HTMLElement
 ): Teilleistung[] {
@@ -33,6 +36,9 @@ export default function parseTeilleistungen(
   return result;
 }
 
+/**
+ * @param container div containing the rows of metadata 
+ */
 function getMetadata(container: HTMLElement): TeilleistungMetadata {
   return {
     teilleistungsart: getMetadataRow(container.children[0]),

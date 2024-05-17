@@ -16,7 +16,10 @@ export default function parseFach(node: HTMLElement): Fach {
     wahlbereiche: parseWahlbereicheTable(table),
   };
 }
-
+ /**
+  * Parses strings containing ects ranges in the format /[0-9]+-[0-9]+/ and /[0-9+]/
+  * @returns [minECTS, maxECTS]
+  */
 function parseECTSRange(ectsRangeText: string): [number, number] {
   let ectsRange: [number, number] = [0, 0];
   if (ectsRangeText.includes("-")) {
