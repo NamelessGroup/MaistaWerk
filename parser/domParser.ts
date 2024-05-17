@@ -67,10 +67,11 @@ export default class DomParser {
     let result: HTMLElement[] = [];
     let curBody = this.body;
     let id = 0;
-    while (curBody != undefined && curBody.tagName == undefined) {
+    while (curBody != undefined) {
       if (id == curBody.childElementCount - 1) {
         curBody = curBody.children[curBody.childElementCount - 1];
         id = 0;
+        if (curBody.childElementCount <= 0) break;
       } else {
         result.push(curBody.children[id]);
         id++;

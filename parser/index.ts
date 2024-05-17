@@ -1,7 +1,7 @@
 import { Browser, HTMLElement } from "happy-dom";
 import DomParser from "./domParser";
 import parseFach from "./parseComponents/FachParser";
-import Fach from "./model/Fach";
+import parseModule from "./parseComponents/ModuleParser";
 
 const MODULHANDBUCH_URL =
   "https://www.informatik.kit.edu/downloads/stud/SS24_MSc_2023_MHB_2024_04_03_de_html.html";
@@ -41,6 +41,6 @@ const wahlbereich = fachListe.filter((e) =>
   e.name.startsWith("Wahlbereich")
 )[0];
 
-const module = new DomParser(
-  bodyParser.getChildAtId(fachListeEnd + 1)
-).getAllChildren();
+const module = parseModule(bodyParser.getChildAtId(fachListeEnd + 1));
+
+//console.log(module[module.length-1])
