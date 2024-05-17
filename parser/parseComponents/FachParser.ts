@@ -1,5 +1,5 @@
 import { HTMLElement } from "happy-dom";
-import Fach from "../model/Fach";
+import Fach from "../../model/Fach";
 import parseWahlbereicheTable from "./WahlbereicheParser";
 
 export default function parseFach(node: HTMLElement): Fach {

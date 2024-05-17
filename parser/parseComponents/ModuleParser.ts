@@ -1,6 +1,6 @@
 import { HTMLElement, HTMLTableElement } from "happy-dom";
 import DomParser from "../domParser";
-import Module, { ModuleMetadata } from "../model/Module";
+import Module, { ModuleMetadata } from "../../model/Module";
 import parseWahlbereicheTable from "./WahlbereicheParser";
 import { getMetadataRow, getVerantwortlicher } from "./ModulTeilleistungCommon";
 

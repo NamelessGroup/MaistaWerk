@@ -1,4 +1,4 @@
-import Wahlbereich from "../model/Wahlbereich";
+import Wahlbereich from "../../model/Wahlbereich";
 import {HTMLTableElement} from 'happy-dom'
 
 export default function parseWahlbereicheTable(table: HTMLTableElement): Wahlbereich[] {

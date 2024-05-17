@@ -1,4 +1,4 @@
-import { Browser, HTMLElement } from "happy-dom";
+import { Browser } from "happy-dom";
 import DomParser from "./domParser";
 import parseFach from "./parseComponents/FachParser";
 import parseModule from "./parseComponents/ModuleParser";
@@ -67,7 +67,7 @@ const teilleistungen = parseTeilleistungen(
 );
 const postTeilleistungParseTime = Date.now();
 console.log(
-  `Parsed Modul list in ${postTeilleistungParseTime - postModuleParseTime}ms`
+  `Parsed Teilleistungs list in ${postTeilleistungParseTime - postModuleParseTime}ms`
 );
 //console.log(teilleistungen[teilleistungen.length-1])
 

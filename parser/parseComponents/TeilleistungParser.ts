@@ -1,7 +1,7 @@
 import { HTMLElement, HTMLTableElement } from "happy-dom";
 import DomParser from "../domParser";
 import { getMetadataRow, getVerantwortlicher } from "./ModulTeilleistungCommon";
-import Teilleistung, { TeilleistungMetadata } from "../model/Teilleistung";
+import Teilleistung, { TeilleistungMetadata } from "../../model/Teilleistung";
 
 export default function parseTeilleistungen(
   container: HTMLElement
