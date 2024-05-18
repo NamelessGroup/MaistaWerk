@@ -30,17 +30,23 @@ const state = defineStore('state', {
     getWahlbereich(): Fach {throw "Not yet implemented"},
 
     // for saving and restoring
-    getChoicesAsJsonString(): string {throw "Not yet implemented"}
+    getChoicesAsJsonString(): string {
+      return JSON.stringify(this.choices)
+    }
   },
   actions: {
     setUeQLP(punkte: number) { this.choices.ueqPunkte = punkte },
     // sets the fach by name for the given slot
-    setFach(fach: FachSlotNames, fach: Fach) {},
+    setFach(fachSlot: FachSlotNames, fach: Fach) {},
     addModul(fach: FachSlotNames, wahlbereichIndex: number, id: string) {},
+    removeModul(fach: FachSlotNames, wahlbereichIndex: number, id: string) {},
     addTeilleistung(modulId: string, teillesitungsId: string) {},
+    removeTeilleistung(modulId: string, teillesitungsId: string) {},
 
     // for saving and restoring
-    loadChoicesFromJsonString(json: string) {}
+    loadChoicesFromJsonString(json: string) {
+      this.choices = JSON.parse(json)
+    }
   }
 })
 
