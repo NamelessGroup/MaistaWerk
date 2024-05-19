@@ -44,7 +44,7 @@ const vertiefungsfacher = fachListe.filter((e) =>
   e.name.startsWith("Vertiefungsfach")
 );
 const erganzungsfach = fachListe.filter((e) =>
-  e.name.startsWith("Ergängzungsfach")
+  e.name.startsWith("Ergänzungsfach")
 );
 const wahlbereich = fachListe.filter((e) =>
   e.name.startsWith("Wahlbereich")
