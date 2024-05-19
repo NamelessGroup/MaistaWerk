@@ -25,13 +25,16 @@ const state = defineStore('state', {
   getters: {
     getUeQLp(): number { return this.choices.ueqPunkte },
     // returns the ids of all chosen modules
-    getAllChosenModule(): Iterable<string> {throw "Not yet implemented"},
+    getAllChosenModule(): string[] {return [];throw "Not yet implemented"},
     // returns all chosen teilleistungen
-    getChosenTeilleistungen(): Iterable<string> {throw "Not yet implemented"},
+    getChosenTeilleistungen(): string[] {throw "Not yet implemented"},
     // returns all teilleistungen for the chosen module
     getFach: () => (fach: FachSlotNames): Fach|undefined => {throw "Not yet implemented"},
     // returns the ids of the modules chosen in the given fach and the given wahlbereich
     getChosen: (state: State) => (fach: FachSlotNames, wahlbereichIndex: number): Iterable<string> => {throw "Not yet implemented"},
+    // returns the sum of all lp
+    getTotalChosenLP(): number {return 0;throw "Not yet implemented"},
+
 
     // Should efficiently return the stuff from the generated jsons
     getModulById: (state: State) => (id: string): Modul => {

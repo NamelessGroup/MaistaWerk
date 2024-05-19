@@ -1,14 +1,14 @@
-enum Stammmodule {
-  MMI = "Mensch-Maschine-Interaktion",
-  FormSys = "Formale Systeme",
-  Telematik = "Telematik",
-  RechnerStruk = "RechnerStrukturen",
-  SWT2 = "Softwaretechnick II",
-  CompGrafuk = "Computergrafik",
-  RobotikI = "Robotik I",
-  Algo2 = "Algorithmen II",
-  FKI = "Fortgeschrittene Künstliche Intelligenz",
-  ItSec = "IT-Sicherheit"
-}
+const stammmodule = [
+  "Mensch-Maschine-Interaktion",
+  "Formale Systeme",
+  "Telematik",
+  "RechnerStrukturen",
+  "Softwaretechnick II",
+  "Computergrafik",
+  "Robotik I",
+  "Algorithmen II",
+  "Fortgeschrittene Künstliche Intelligenz",
+  "IT-Sicherheit"
+]
 
-export default Stammmodule
+export default stammmodule
