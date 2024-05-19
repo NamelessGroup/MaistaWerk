@@ -1,7 +1,7 @@
 <template>
   <div class="bg-slate-800">
     <div class="flex p-2">
-      <div class="flex-1"><!-- Placeholder --></div>
+      <div v-if="!collapsed" class="flex-1 text-xl font-bold">Übersicht<!-- Placeholder --></div>
       <button @click="collapsed = !collapsed">
         <img class="h-5" src="../assets/bars-solid.svg" />
       </button>
@@ -19,7 +19,7 @@
         <ModuleBase name="Masterarbeit">30 LP</ModuleBase>
         <ModuleBase class="max-w-44" name="Überfachliche Qualifikationen">
           <div class="w-full flex gap-1">
-            <select v-model="ueQLP" class="flex-1 bg-slate-800 rounded-sm px-2">
+            <select v-model="ueQLP" class="flex-1 bg-slate-900 rounded-sm px-2">
               <option
                 v-for="i in maxUeQLP - minUeQLP + 1"
                 :key="i"

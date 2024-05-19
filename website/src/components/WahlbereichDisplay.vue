@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="text-lg font-bold">{{name}}</h1>
-    <p class="font-bold">{{getRestrictionString(wahlbereich)}}</p>
+    <p class="font-bold" v-if="name != 'Pflichtbereich'">{{getRestrictionString(wahlbereich)}}</p>
     <ModulleList :wahlbereich="wahlbereich" />
   </div>
 </template>

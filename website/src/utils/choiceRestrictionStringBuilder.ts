@@ -14,12 +14,18 @@ interface RestrictionInput {
 
 export default function getRestrictionString(res: RestrictionInput): string {
   const model = inputToModel(res)
-  const point = restrictionPoint({min: model.minLP, max: model.maxLP}) + 'LP'
-  const bestandteile = restrictionPoint({min: model.minBestandteile, max: model.maxBestandteile}) + 'Bestandteile'
+  const point = restrictionPoint({min: model.minLP, max: model.maxLP})
+  const bestandteile = restrictionPoint({min: model.minBestandteile, max: model.maxBestandteile})
   if (point && bestandteile) {
-    return point + ' und ' + bestandteile
+    return point + ' LP und ' + bestandteile + ' Bestandteile'
   }
-  return point || bestandteile
+  if (point) {
+    return point + ' LP'
+  }
+  if (bestandteile) {
+    return bestandteile + ' Bestandteile'
+  }
+  return ''
 }
 
 function inputToModel(i: RestrictionInput): RestrictionModel {
