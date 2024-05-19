@@ -1,3 +1,5 @@
 enum FachSlotNames {
-  VT1, VT2, WAHL, EF 
+  VT1 = "Vertiefungsfach 1", VT2 = "Vertiefungsfach 2", WAHL = "Wahlbereich", EF = "Ergänzungsfach" 
 }
+
+export default FachSlotNames

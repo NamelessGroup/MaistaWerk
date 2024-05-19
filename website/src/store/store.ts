@@ -9,6 +9,7 @@ import teilleistungJson from "../data/teilleistungen.json";
 import wahlbereichJson from "../data/wahlbereich.json"
 import ergaenzugsfaecherJson from "../data/erganzungsfach.json"
 import vertiefungsfaecherJson from "../data/vertiefung.json"
+import FachSlotNames from "../model/FachSlotNames";
 
 const state = defineStore('state', {
   state: (): State => ({
@@ -24,13 +25,13 @@ const state = defineStore('state', {
   getters: {
     getUeQLp(): number { return this.choices.ueqPunkte },
     // returns the ids of all chosen modules
-    getAllChosenModule(): string[] {throw "Not yet implemented"},
+    getAllChosenModule(): Iterable<string> {throw "Not yet implemented"},
     // returns all chosen teilleistungen
-    getChosenTeilleistungen(): string[] {throw "Not yet implemented"},
+    getChosenTeilleistungen(): Iterable<string> {throw "Not yet implemented"},
     // returns all teilleistungen for the chosen module
-    gegetFach: () => (fach: FachSlotNames): Fach|undefined => {throw "Not yet implemented"},
+    getFach: () => (fach: FachSlotNames): Fach|undefined => {throw "Not yet implemented"},
     // returns the ids of the modules chosen in the given fach and the given wahlbereich
-    getChosen: (state: State) => (fach: FachSlotNames, wahlbereichIndex: number): string[] => {throw "Not yet implemented"},
+    getChosen: (state: State) => (fach: FachSlotNames, wahlbereichIndex: number): Iterable<string> => {throw "Not yet implemented"},
 
     // Should efficiently return the stuff from the generated jsons
     getModulById: (state: State) => (id: string): Modul => {
@@ -43,7 +44,7 @@ const state = defineStore('state', {
       if (teilleistung) return teilleistung
       throw "No Teilleistung found with id: " + id
     },
-    getAllFaecherVertiefungsfaecher(): Fach[] {return this.modulhandbuch.vertiefungsfaecher},
+    getAllVertiefungsfaecher(): Fach[] {return this.modulhandbuch.vertiefungsfaecher},
     getAllErgaenzungsfaecher(): Fach[] {return this.modulhandbuch.ergaenzungsfaecher},
     getWahlbereich(): Fach {return this.modulhandbuch.wahlbereich},
 
