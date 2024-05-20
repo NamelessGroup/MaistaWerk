@@ -1,11 +1,11 @@
-interface RestrictionModel {
+export interface RestrictionModel {
   minLP: number
   maxLP: number
   minBestandteile: number
   maxBestandteile: number
 }
 
-interface RestrictionInput {
+export interface RestrictionInput {
   minLP?: number
   maxLP?: number
   minBestandteile?: number
@@ -28,7 +28,7 @@ export default function getRestrictionString(res: RestrictionInput): string {
   return ''
 }
 
-function inputToModel(i: RestrictionInput): RestrictionModel {
+export function inputToModel(i: RestrictionInput): RestrictionModel {
   return {
     minLP: i.minLP ?? NaN,
     maxLP: i.maxLP ?? NaN,
@@ -46,6 +46,9 @@ function restrictionPoint(res: {min: number, max: number}) {
   }
   if (isNaN(res.max)) {
     return `Mindestens ${res.min}`
+  }
+  if (res.min == res.max) {
+    return `${res.min}`
   }
   return `${res.min} - ${res.max}`
 }

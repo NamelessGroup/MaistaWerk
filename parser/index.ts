@@ -88,3 +88,6 @@ console.log(
     postTeilleistungParseTime - postFetchTime
   }ms`
 );
+
+const temp = module.filter((e) => e.name.includes("Meteorology") || e.wahlbereiche.length >= 2);
+writeToFile(temp, [RESULT_BASE_FOLDER_NAME, "temp.json"]);
