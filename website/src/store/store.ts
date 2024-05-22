@@ -24,16 +24,16 @@ const state = defineStore('state', {
   }),
   getters: {
     getUeQLp(): number { return this.choices.ueqPunkte },
-    // returns the ids of all chosen modules
-    getAllChosenModule(): string[] {return [];throw "Not yet implemented"},
+    // returns the ids of all chosen modules,
+    getAllChosenModule(): string[] {return ['M-INFO-101217', 'M-INFO-101215'];throw "Not yet implemented"},
     // returns all chosen teilleistungen
     getChosenTeilleistungen(): string[] {throw "Not yet implemented"},
     // returns the chosen teilleistugen for the given module in the given wahlbereich
     getChosenTeilleistungenForModul: (state: State) => (modulId: string, wahlbereichIndex: number): string[] => {throw "Not yet implemented"},
     // returns all teilleistungen for the chosen module
-    getFach: () => (fach: FachSlotNames): Fach|undefined => {throw "Not yet implemented"},
+    getFach: (state: State) => (fach: FachSlotNames): Fach|undefined => {return state.modulhandbuch.ergaenzungsfaecher[2]},
     // returns the ids of the modules chosen in the given fach and the given wahlbereich
-    getChosen: (state: State) => (fach: FachSlotNames, wahlbereichIndex: number): Iterable<string> => {throw "Not yet implemented"},
+    getChosen: (state: State) => (fach: FachSlotNames, wahlbereichIndex: number): string[] => {return ['M-PHYS-101664'];throw "Not yet implemented"},
     // returns the sum of all lp
     getTotalChosenLP(): number {return 0;throw "Not yet implemented"},
 

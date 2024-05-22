@@ -1,20 +1,24 @@
 <template>
-  <ModulleList :wahlbereich="{}"></ModulleList>
-  <ModulleList v-if="wahlbereiche.length == 1" :wahlbereich="wahlbereiche[0]" />
+  <ModulleList v-if="wahlbereicheCount == 1" :wahlbereich-index="0" :slot="slot" />
   <div v-else>
-    <WahlbereichDisplay v-for="wahlbereich in wahlbereiche" :wahlbereich="wahlbereich" />
+    <WahlbereichDisplay v-for="index in wahlbereicheCount" :wahlbereich-index="index - 1" :slot="slot" />
   </div>
 </template>
 
 <script setup lang="ts">
-import Wahlbereich from '../../../model/Wahlbereich';
+import { computed, PropType } from 'vue';
 import ModulleList from './ModulleList.vue';
 import WahlbereichDisplay from './WahlbereichDisplay.vue';
+import FachSlotNames from '../model/FachSlotNames';
+import state from '../store/store';
 
-defineProps({
-  wahlbereiche: {
-    type: Array<Wahlbereich>,
+const props = defineProps({
+  slot: {
+    type: String as PropType<FachSlotNames>,
     required: true
-  } 
+  }
 })
+
+const wahlbereicheCount = computed(() => state().getFach(props.slot)?.wahlbereiche.length ?? 0)
+
 </script>

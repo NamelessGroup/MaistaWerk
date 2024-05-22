@@ -6,7 +6,8 @@
     <slot></slot>
   </div>
   <div class="overflow-y-auto flex-grow">
-    <WahlbereichList :wahlbereiche="fach?.wahlbereiche ?? []" />
+    <div class="min-h-6" v-if="!$slots.default"><!--Empty space--></div>
+    <WahlbereichList :slot="slot" />
   </div>
 </div>
 </template>
@@ -25,7 +26,5 @@ const props = defineProps({
   }
 })
 
-const fach = computed(() => {
-  return undefined//state().getFach(props.slot)
-})
+const fach = computed(() => state().getFach(props.slot))
 </script>

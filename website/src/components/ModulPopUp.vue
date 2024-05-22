@@ -1,8 +1,18 @@
 <template>
-  <div class="absolute top-0 left-0 right-0 bottom-0 max-h-screen h-screen overflow-hidden p-10 z-10 flex items-center justify-center align-middle backdrop-blur-sm" @click="$emit('close')">
-    <div class="bg-slate-900 relative border rounded border-slate-500 z-20 h-full w-full p-2" @click="e => e.stopPropagation()">
-      <div class="grid grid-cols-2 grid-rows-[auto_1fr] gap-5 h-full overflow-hidden max-h-full">
-        <h1 class="col-span-2 col-start-1 row-start-1 text-xl font-bold">{{ modul.id }} - {{ modul.name }}</h1>
+  <div
+    class="absolute top-0 left-0 right-0 bottom-0 max-h-screen h-screen overflow-hidden p-10 z-10 flex items-center justify-center align-middle backdrop-blur-sm"
+    @click="$emit('close')"
+  >
+    <div
+      class="bg-slate-900 relative border rounded border-slate-500 z-20 h-full w-full p-2"
+      @click="(e) => e.stopPropagation()"
+    >
+      <div
+        class="grid grid-cols-2 grid-rows-[auto_1fr] gap-5 h-full overflow-hidden max-h-full"
+      >
+        <h1 class="col-span-2 col-start-1 row-start-1 text-xl font-bold">
+          {{ modul.id }} - {{ modul.name }}
+        </h1>
         <table class="col-start-1 row-start-2 h-fit">
           <tr>
             <td class="font-bold">LP:</td>
@@ -32,7 +42,10 @@
       </div>
 
       <div class="absolute right-0 top-0">
-        <div class="relative -right-1/3 cursor-pointer -top-1/3 text-xl font-bold border rounded-full border-slate-500 w-8 h-8 flex items-center justify-center align-middle text-center bg-slate-900" @click="$emit('close')">
+        <div
+          class="relative cursor-pointer text-xl font-bold border rounded-full border-slate-500 w-8 h-8 flex items-center justify-center align-middle text-center bg-slate-900"
+          @click="$emit('close')"
+        >
           <img src="../assets/xmark-solid.svg" class="h-6 w-6" />
         </div>
       </div>
@@ -41,19 +54,16 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
-import Modul from '../../../model/Module';
-import TeilleistungPicker from './TeilleistungPicker.vue'
-
+import { PropType } from "vue";
+import Modul from "../../../model/Module";
+import TeilleistungPicker from "./TeilleistungPicker.vue";
 
 defineProps({
   modul: {
     type: Object as PropType<Modul>,
-    required: true
-  
-  }
-})
+    required: true,
+  },
+});
 
-defineEmits(['close'])
-
+defineEmits(["close"]);
 </script>

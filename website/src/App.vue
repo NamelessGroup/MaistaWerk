@@ -17,31 +17,17 @@ import SideBarComponent from './components/SideBarComponent.vue';
 import state from './store/store';
 import FachDisplayWithSelect from './components/FachDisplayWithSelect.vue';
 import FachDisplay from './components/FachDisplay.vue';
-import ModulPopUp from './components/ModulPopUp.vue';
-import Modul from '../../model/Module';
 
 const vtOptions = computed(() => {
   const options = Array.from(state().getAllVertiefungsfaecher)
-  const selectVT1 = undefined//state().getFach(FachSlotNames.VT1)
-  const selectVT2 = undefined//state().getFach(FachSlotNames.VT2)
+  const selectVT1 = state().getFach(FachSlotNames.VT1)
+  const selectVT2 = state().getFach(FachSlotNames.VT2)
   return options.filter(fach => fach.name != selectVT1?.name && fach.name != selectVT2?.name)
 })
 
 const efOptions = computed(() => {
   const options = Array.from(state().getAllErgaenzungsfaecher)
-  const selectEF = undefined//state().getFach(FachSlotNames.EF)
+  const selectEF = state().getFach(FachSlotNames.EF)
   return options.filter(fach => fach.name != selectEF?.name)
 })
-
-const modul: Modul = {
-  id: 'M-INFO-1232',
-  name: 'Modul 1',
-  lp: 5,
-  verantwortlicher: 'Prof. Dr. Mustermann',
-  sprache: 'Deutsch',
-  turnus: 'Jedes Sommersemester',
-  dauer: 1,
-  wahlbereiche: [],
-  link: ''
-}
 </script>
