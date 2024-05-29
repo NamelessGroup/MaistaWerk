@@ -4,7 +4,7 @@
     <div class="space-y-5 px-2">
       <ModuleDisplay v-for="m in chosenModules" :key="m.id" :modul="m" :chosen-state="ModuleChosenState.CHOSEN_IN_THIS" />
     </div>
-    <hr class="border-slate-500" />
+    <hr class="border-primary-500" />
     <div  class="space-y-5 px-2">
       <ModuleDisplay v-for="m in chosableModules" :key="m.id" :modul="m" :chosen-state="ModuleChosenState.CHOSABLE" />
       <ModuleDisplay v-for="m in chosenInOtherModules" key="m.id" :modul="m" :chosen-state="ModuleChosenState.CHOSEN_IN_OTHER" />

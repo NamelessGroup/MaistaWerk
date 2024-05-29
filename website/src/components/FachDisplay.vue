@@ -1,5 +1,5 @@
 <template>
-<div class="bg-slate-800 rounded-md border border-slate-500 flex flex-col overflow-hidden">
+<div class="bg-primary-800 rounded-md border border-primary-500 flex flex-col overflow-hidden">
   <div class="p-2">
     <h1 class="font-bold text-xl">{{ slot }}</h1>
     <div>{{getRestrictionString(fach ?? {})}}</div>

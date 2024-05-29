@@ -1,8 +1,8 @@
 <template>
   <div 
-    class="border rounded-md p-1 border-slate-500 bg-slate-700 space-y-2"
+    class="border rounded-md p-1 border-primary-500 bg-primary-700 space-y-2"
     :class="{
-      'border-red-500 bg-slate-500 opacity-80': chosenState == ModuleChosenState.CHOSEN_IN_OTHER,
+      'border-red-500 bg-primary-500 opacity-80': chosenState == ModuleChosenState.CHOSEN_IN_OTHER,
     }"
   >
     <div class="flex flex-wrap gap-2">

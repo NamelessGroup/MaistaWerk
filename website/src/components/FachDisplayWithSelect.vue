@@ -1,6 +1,6 @@
 <template>
   <FachDisplay :slot="slot">
-    <select v-model="selectedFach" class="w-full max-w-full rounded-sm bg-slate-900 px-2">
+    <select v-model="selectedFach" class="w-full max-w-full rounded-sm bg-primary-900 px-2">
       <option disabled selected :value="undefined">---</option>
       <option v-for="fach in faecher" :key="fach.name" :value="fach">{{ fachNameBuilder(fach) }}</option>
     </select>

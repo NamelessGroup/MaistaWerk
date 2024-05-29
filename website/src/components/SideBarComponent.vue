@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-slate-800 max-w-48 flex flex-col">
+  <div class="bg-primary-800 max-w-48 flex flex-col">
     <div class="flex p-2">
       <div v-if="!collapsed" class="flex-1 text-xl font-bold">
         Übersicht<!-- Placeholder -->
@@ -24,7 +24,7 @@
             <div class="w-full flex gap-1">
               <select
                 v-model="ueQLP"
-                class="flex-1 bg-slate-900 rounded-sm px-2"
+                class="flex-1 bg-primary-900 rounded-sm px-2"
               >
                 <option
                   v-for="i in maxUeQLP - minUeQLP + 1"
@@ -52,7 +52,7 @@
 
         <div class="p-2 space-y-2">
           <button
-            class="flex items-center w-full border rounded-md border-slate-500 bg-slate-700 p-1 gap-2"
+            class="flex items-center w-full border rounded-md border-primary-500 bg-primary-700 p-1 gap-2"
             @click="downloadFile()"
           >
             <img class="h-5" src="../assets/download-solid.svg" />
@@ -60,7 +60,7 @@
           </button>
 
           <button
-            class="flex items-center w-full border rounded-md border-slate-500 bg-slate-700 p-1 gap-2"
+            class="flex items-center w-full border rounded-md border-primary-500 bg-primary-700 p-1 gap-2"
             @click="uploadFile()"
           >
             <img class="h-5" src="../assets/upload-solid.svg" />
@@ -78,7 +78,7 @@
           <span>GitHub</span>
         </a>
 
-        <div class="text-xs text-slate-400 text-wrap">
+        <div class="text-xs text-primary-400 text-wrap">
           Alle angaben ohne Gewähr. Daten wurden automatisch aus dem
           <a
             class="underline text-link cursor-pointer"
