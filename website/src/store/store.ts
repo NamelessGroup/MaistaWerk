@@ -62,6 +62,9 @@ const state = defineStore('state', {
         getTotalChosenLP(): number {
             return this.choices.ueqPunkte + [...this.choices.chosenFachToModule.values()].flat().map(i => this.getModulById(i[0]).lp).reduce((a,b) => a+b,0)
         },
+        getMaximumLP(): number {
+            return 120
+        },
 
 
         // Should efficiently return the stuff from the generated jsons
