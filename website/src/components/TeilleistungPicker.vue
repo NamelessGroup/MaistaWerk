@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-3">
-    <div v-for="wahlbereich in wahlbereiche" >
+    <div v-for="wahlbereich in wahlbereiche">
       <div class="font-bold">
         <span v-if="wahlbereich.p">Pflichtbereich</span>
         <div v-else>
@@ -10,8 +10,19 @@
       </div>
 
       <div v-for="t in wahlbereich.w.modulliste" class="space-x-1">
-        <input type="checkbox" :id="t" :checked="getCheckboxState(t,wahlbereich)" @input="" :disabled="wahlbereich.p" />
-        <label :for="t">{{ state().getTeilleistungById(t).name }} ({{ state().getTeilleistungById(t).lp }} LP)</label>
+        <input
+          type="checkbox"
+          :id="t"
+          :checked="getCheckboxState(t, wahlbereich)"
+          @input="(e) => check(t, wahlbereich, e?.target?.checked ?? false)"
+          :disabled="wahlbereich.p"
+        />
+        <label :for="t"
+          >{{ state().getTeilleistungById(t).name }} ({{
+            state().getTeilleistungById(t).lp
+          }}
+          LP)</label
+        >
       </div>
     </div>
   </div>
@@ -35,15 +46,17 @@ const props = defineProps({
 interface Wahlbereich2 {
   w: Wahlbereich;
   p: boolean;
-  t: string[];
+  t: string[],
+  i: number
 }
 
 const wahlbereiche = computed(() => {
   return props.modul.wahlbereiche.map((wb, idx) => {
     return {
       w: wb,
+      i: idx,
       p: isPflichtbereich(wb, state().getTeilleistungById),
-      t: [] as string[]//state().getChosenTeilleistungenForModul(props.modul.id, idx),
+      t: state().getChosenTeilleistungenForModul(props.modul.id, idx),
     };
   });
 });
@@ -51,4 +64,13 @@ const wahlbereiche = computed(() => {
 function getCheckboxState(teilleistungId: string, wahlbereich: Wahlbereich2) {
   return wahlbereich.p || wahlbereich.t.includes(teilleistungId);
 };
+
+function check(teilleistungId: string, wahlbereich: Wahlbereich2, val: boolean) {
+  if (wahlbereich.p) return;
+  if (val) {
+    state().addTeilleistung(props.modul.id, teilleistungId, wahlbereich.i);
+  } else {
+    state().removeTeilleistung(props.modul.id, teilleistungId);
+  }
+}
 </script>
