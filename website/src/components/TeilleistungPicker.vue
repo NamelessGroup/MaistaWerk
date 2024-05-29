@@ -14,7 +14,7 @@
           type="checkbox"
           :id="t"
           :checked="getCheckboxState(t, wahlbereich)"
-          @input="(e) => check(t, wahlbereich, e?.target?.checked ?? false)"
+          @input="(e) => check(t, wahlbereich, (e?.target as unknown as CustomEventTargetObject)?.checked ?? false)"
           :disabled="shouldBeDisabled(t, wahlbereich)"
         />
         <label :for="t"
@@ -43,6 +43,8 @@ const props = defineProps({
     required: true,
   },
 });
+
+type CustomEventTargetObject = {checked: boolean} | undefined;
 
 interface Wahlbereich2 {
   w: Wahlbereich;
