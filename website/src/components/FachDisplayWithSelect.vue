@@ -2,7 +2,7 @@
   <FachDisplay :slot="slot">
     <select v-model="selectedFach" class="w-full max-w-full rounded-sm bg-primary-900 px-2">
       <option disabled selected :value="undefined">---</option>
-      <option v-for="fach in faecher" :key="fach.name" :value="fach">{{ fachNameBuilder(fach) }}</option>
+      <option v-for="fach in faecher" :disabled="shouldBeDisabled(fach)" :key="fach.name" :value="fach.name">{{ fachNameBuilder(fach) }}</option>
     </select>
   </FachDisplay>
 </template>
@@ -28,7 +28,11 @@ const props = defineProps({
 
 const selectedFach = ref<Fach>({} as Fach)
 
+function shouldBeDisabled(fach: Fach) {
+  return [FachSlotNames.VT1, FachSlotNames.VT2, FachSlotNames.EF].some(f => state().getFach(f)?.name == fach.name)
+}
+
 watch(selectedFach, (newVal) => {
-  state().setFach(props.slot, newVal)
+  state().setFach(props.slot, props.faecher.filter(fach => fach.name === newVal)[0])
 })
 </script>
