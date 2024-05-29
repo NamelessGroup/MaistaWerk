@@ -1,7 +1,7 @@
 <template>
   <div
     class="absolute top-0 left-0 right-0 bottom-0 max-h-screen h-screen overflow-hidden p-10 z-10 flex items-center justify-center align-middle backdrop-blur-sm"
-    @click="$emit('close')"
+    @click="e => close(e)"
   >
     <div
       class="bg-primary-900 relative border rounded border-primary-500 z-20 h-full w-full p-2"
@@ -43,8 +43,8 @@
 
       <div class="absolute right-0 top-0">
         <div
-          class="relative cursor-pointer text-xl font-bold border rounded-full border-primary-500 w-8 h-8 flex items-center justify-center align-middle text-center bg-primary-900"
-          @click="$emit('close')"
+          class="relative cursor-pointer text-xl font-bold w-8 h-8 flex items-center justify-center align-middle text-center bg-primary-900"
+          @click="e => close(e)"
         >
           <img src="../assets/xmark-solid.svg" class="h-6 w-6" />
         </div>
@@ -65,5 +65,10 @@ defineProps({
   },
 });
 
-defineEmits(["close"]);
+const emit = defineEmits(["close"]);
+
+function close(e: Event) {
+  e.stopPropagation()
+  emit("close")
+}
 </script>
