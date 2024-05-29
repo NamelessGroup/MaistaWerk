@@ -1,62 +1,92 @@
 <template>
-  <div class="bg-slate-800">
+  <div class="bg-primary-800 max-w-48 flex flex-col">
     <div class="flex p-2">
-      <div v-if="!collapsed" class="flex-1 text-xl font-bold">Übersicht<!-- Placeholder --></div>
+      <div v-if="!collapsed" class="flex-1 text-xl font-bold">
+        Übersicht<!-- Placeholder -->
+      </div>
       <button @click="collapsed = !collapsed">
         <img class="h-5" src="../assets/bars-solid.svg" />
       </button>
     </div>
 
-    <div v-if="!collapsed" class="space-y-5">
-      <ModuleBase class="m-2" :name="state().getTotalChosenLP + ' LP'">
-        <div>
-          <div>WiSe: {{ wiSeLP }} LP</div>
-          <div>SoSe: {{ soSeLP }} LP</div>
-        </div>
-      </ModuleBase>
-
-      <div class="space-y-2 p-2">
-        <ModuleBase name="Masterarbeit">30 LP</ModuleBase>
-        <ModuleBase class="max-w-44" name="Überfachliche Qualifikationen">
-          <div class="w-full flex gap-1">
-            <select v-model="ueQLP" class="flex-1 bg-slate-900 rounded-sm px-2">
-              <option
-                v-for="i in maxUeQLP - minUeQLP + 1"
-                :key="i"
-                :value="i + minUeQLP - 1"
-              >
-                {{ i + minUeQLP - 1 }}
-              </option>
-            </select>
-            <span>LP</span>
+    <div v-if="!collapsed" class="space-y-5 flex-grow flex flex-col">
+      <div class="space-y-5 flex-grow">
+        <ModuleBase class="m-2" :name="state().getTotalChosenLP + ' LP'">
+          <div>
+            <div>WiSe: {{ wiSeLP }} LP</div>
+            <div>SoSe: {{ soSeLP }} LP</div>
           </div>
         </ModuleBase>
+
+        <div class="space-y-2 p-2">
+          <ModuleBase name="Masterarbeit">30 LP</ModuleBase>
+          <ModuleBase class="max-w-44" name="Überfachliche Qualifikationen">
+            <div class="w-full flex gap-1">
+              <select
+                v-model="ueQLP"
+                class="flex-1 bg-primary-900 rounded-sm px-2"
+              >
+                <option
+                  v-for="i in maxUeQLP - minUeQLP + 1"
+                  :key="i"
+                  :value="i + minUeQLP - 1"
+                >
+                  {{ i + minUeQLP - 1 }}
+                </option>
+              </select>
+              <span>LP</span>
+            </div>
+          </ModuleBase>
+        </div>
+
+        <ModuleBase
+          :name="chosenStammmodule.length + '/4 Stammodule'"
+          class="m-2"
+        >
+          <div>
+            <div v-for="modul in chosenStammmodule" :key="modul.name">
+              {{ modul.name }}
+            </div>
+          </div>
+        </ModuleBase>
+
+        <div class="p-2 space-y-2">
+          <button
+            class="flex items-center w-full border rounded-md border-primary-500 bg-primary-700 p-1 gap-2"
+            @click="downloadFile()"
+          >
+            <img class="h-5" src="../assets/download-solid.svg" />
+            <div>Download</div>
+          </button>
+
+          <button
+            class="flex items-center w-full border rounded-md border-primary-500 bg-primary-700 p-1 gap-2"
+            @click="uploadFile()"
+          >
+            <img class="h-5" src="../assets/upload-solid.svg" />
+            <div>Upload</div>
+          </button>
+        </div>
       </div>
 
-      <ModuleBase :name="chosenStammmodule.length + '/4 Stammodule'" class="m-2">
-        <div>
-          <div v-for="modul in chosenStammmodule" :key="modul.name">
-            {{ modul.name }}
-          </div>
-        </div>
-      </ModuleBase>
-
       <div class="p-2 space-y-2">
-        <button
-          class="flex items-center w-full border rounded-md border-slate-500 bg-slate-700 p-1 gap-2"
-          @click="downloadFile()"
+        <a
+          class="text-sm gap-1 text-link underline flex items-center cursor-pointer"
+          href="https://github.com/NamelessGroup/MaistaWerk"
         >
-          <img class="h-5" src="../assets/download-solid.svg" />
-          <div>Download</div>
-        </button>
+          <img src="../assets/github.svg" class="max-h-4" />
+          <span>GitHub</span>
+        </a>
 
-        <button
-          class="flex items-center w-full border rounded-md border-slate-500 bg-slate-700 p-1 gap-2"
-          @click="uploadFile()"
-        >
-          <img class="h-5" src="../assets/upload-solid.svg" />
-          <div>Upload</div>
-        </button>
+        <div class="text-xs text-primary-400 text-wrap">
+          Alle angaben ohne Gewähr. Daten wurden automatisch aus dem
+          <a
+            class="underline text-link cursor-pointer"
+            href="https://www.informatik.kit.edu/formulare.php#A"
+            >Modulhandbuch</a
+          >
+          generiert. Einige Vorraussetzungen werden nicht automatisch geprüft.
+        </div>
       </div>
     </div>
   </div>
@@ -69,14 +99,24 @@ import state from "../store/store";
 import stammmodule from "../model/Stammmodule";
 import Modul from "../../../model/Module";
 
-const allModule = computed(() => state().getAllChosenModule.map((modul) => state().getModulById(modul)));
+const allModule = computed(() =>
+  state().getAllChosenModule.map((modul) => state().getModulById(modul))
+);
 
 const soSeLP = computed(() =>
-  getLPCount(allModule.value.filter(modul => modul.name.toLocaleLowerCase().includes("sommer")))
+  getLPCount(
+    allModule.value.filter((modul) =>
+      modul.name.toLocaleLowerCase().includes("sommer")
+    )
+  )
 );
 
 const wiSeLP = computed(() =>
-  getLPCount(allModule.value.filter(modul => modul.name.toLocaleLowerCase().includes("winter")))
+  getLPCount(
+    allModule.value.filter((modul) =>
+      modul.name.toLocaleLowerCase().includes("winter")
+    )
+  )
 );
 
 function getLPCount(module: Modul[]) {

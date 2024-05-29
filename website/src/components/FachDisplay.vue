@@ -1,12 +1,13 @@
 <template>
-<div class="bg-slate-800 rounded-md border border-slate-500 flex flex-col overflow-hidden">
+<div class="bg-primary-800 rounded-md border border-primary-500 flex flex-col overflow-hidden">
   <div class="p-2">
     <h1 class="font-bold text-xl">{{ slot }}</h1>
     <div>{{getRestrictionString(fach ?? {})}}</div>
     <slot></slot>
   </div>
   <div class="overflow-y-auto flex-grow">
-    <WahlbereichList :wahlbereiche="fach?.wahlbereiche ?? []" />
+    <div class="min-h-6" v-if="!$slots.default"><!--Empty space--></div>
+    <WahlbereichList :slot="slot" />
   </div>
 </div>
 </template>
@@ -25,7 +26,5 @@ const props = defineProps({
   }
 })
 
-const fach = computed(() => {
-  return undefined//state().getFach(props.slot)
-})
+const fach = computed(() => state().getFach(props.slot))
 </script>
