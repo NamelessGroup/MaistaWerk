@@ -22,7 +22,7 @@
         />
       </div>
     </div>
-    <ModulPopUp :modul="modul" v-if="visible" @close="visible = false" />
+    <ModulPopUp :modul="modul" v-if="popUpVisible" @close="popUpVisible = false" />
   </ModuleBase>
 </template>
 
@@ -46,10 +46,10 @@ const props = defineProps({
 
 const emit = defineEmits(["add", "remove"]);
 
-const visible = ref(false);
+const popUpVisible = ref(false);
 
 function setVisible() {
-  if (props.chosenState != ModuleChosenState.CHOSEN_IN_OTHER) visible.value = true
+  if (props.chosenState != ModuleChosenState.CHOSEN_IN_OTHER) popUpVisible.value = true
 }
 
 function clickedActionButton(e: MouseEvent) {
