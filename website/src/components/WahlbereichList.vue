@@ -1,5 +1,5 @@
 <template>
-  <ModulleList v-if="wahlbereicheCount == 1" :wahlbereich-index="0" :slot="slot" :remaining-lp="fachMaxLP" />
+  <ModulleList v-if="wahlbereicheCount == 1" :wahlbereich-index="0" :slot="slot" :remaining-lp="remainingLp" />
   <div v-else>
     <WahlbereichDisplay v-for="index in wahlbereicheCount" :wahlbereich-index="index - 1" :slot="slot" />
   </div>
@@ -20,6 +20,6 @@ const props = defineProps({
 })
 
 const wahlbereicheCount = computed(() => state().getFach(props.slot)?.wahlbereiche.length ?? 0)
-const fachMaxLP = computed(() => state().getFach(props.slot)?.maxLP ?? 0)
+const remainingLp = computed(() => (state().getFach(props.slot)?.maxLP ?? 0) - (state().getFach(props.slot)?.wahlbereiche.flatMap((_,i) => state().getChosenFromWahlbereichAndFach(props.slot, i).map(i => state().getModulById(i).lp)).reduce((a,b) => a+b, 0) ?? 0))
 
 </script>

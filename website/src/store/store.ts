@@ -13,12 +13,17 @@ import FachSlotNames from "../model/FachSlotNames";
 import isPflichtbereich from "../utils/PflichtbereichChecker.ts";
 
 const state = defineStore('state', {
-    state: (): State => ({
+    state: (): State => {
+        const faecher = new Map<FachSlotNames, Fach>()
+        faecher.set(FachSlotNames.WAHL, wahlbereichJson as unknown as Fach)
+        const fachModulMap = new Map<string, [string, number][]>()
+        fachModulMap.set(faecher.get(FachSlotNames.WAHL)?.name ?? '', [])
+        return {
         choices: {
             ueqPunkte: 2,
-            chosenFachToModule: new Map<string, [string, number][]>(),
+            chosenFachToModule: fachModulMap,
             chosenModuleToTeilleistungenListe: new Map<string, [string, number][]>(),
-            chosenFaecher: new Map<FachSlotNames, Fach>()
+            chosenFaecher: faecher
 
         },
         modulhandbuch: {
@@ -28,7 +33,7 @@ const state = defineStore('state', {
             module: arrayToMap<Modul>(moduleJson as unknown as Modul[], (v) => v.id),
             teilleistungen: arrayToMap<Teilleistung>(teilleistungJson as unknown as Teilleistung[], (v) => v.id)
         }
-    }),
+    }},
     getters: {
         getUeQLp(): number {
             return this.choices.ueqPunkte

@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, ref, watch } from "vue";
+import { computed, PropType, ref } from "vue";
 import Modul from "../../../model/Module";
 import ModuleBase from "./ModuleBase.vue";
 import ModulPopUp from "./ModulPopUp.vue";
