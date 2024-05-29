@@ -1,8 +1,8 @@
 <template>
   <div>
     <h1 class="text-lg font-bold px-2">{{name}}</h1>
-    <p class="font-bold px-2" v-if="name != 'Pflichtbereich'">{{getRestrictionString(wahlbereich)}}</p>
-    <ModulleList :slot="slot" :wahlbereich-index="wahlbereichIndex" />
+    <p class="font-bold px-2" v-if="name != 'Pflichtbereich'">{{getRestrictionString(wahlbereich, lpList)}}</p>
+    <ModulleList :slot="slot" :wahlbereich-index="wahlbereichIndex" :remaining-lp="remainingLp" />
   </div>
 </template>
 
@@ -33,5 +33,15 @@ const name = computed(() => {
   } else {
     return "Wahlbereich"
   }
+})
+
+const lpList = computed(() => {
+  return state().getChosenFromWahlbereichAndFach(props.slot, props.wahlbereichIndex).map(i => state().getModulById(i).lp)
+})
+
+const remainingLp = computed(() => {
+  const fach = state().getFach(props.slot)
+  if (!fach) return 0
+  return fach.maxLP - fach.wahlbereiche.flatMap((_,i) => state().getChosenFromWahlbereichAndFach(props.slot, i).map(i => state().getModulById(i).lp)).reduce((a,b) => a+b, 0)
 })
 </script>

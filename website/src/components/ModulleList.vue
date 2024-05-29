@@ -16,8 +16,8 @@
         v-for="m in chosableModules"
         :key="m.id"
         :modul="m"
-        :chosen-state="ModuleChosenState.CHOSABLE"
-        @add="state().addModul(slot, m.id, wahlbereichIndex)"
+        :chosen-state="exedsLimit(m) ? ModuleChosenState.OVER_LIMIT : ModuleChosenState.CHOSABLE"
+        @add="addModul(m)"
       />
       <ModuleDisplay
         v-for="m in chosenInOtherModules"
@@ -45,6 +45,8 @@ import state from "../store/store";
 import FachSlotNames from "../model/FachSlotNames";
 import ModuleChosenState from "../model/ui/ModuleChosenState";
 import isPflichtbereich from "../utils/PflichtbereichChecker";
+import Modul from "../../../model/Module";
+import { canAcceptChoice } from "../utils/choiceManagement";
 
 const props = defineProps({
   slot: {
@@ -55,6 +57,11 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  remainingLp: {
+    type: Number,
+    required: false,
+    default: Infinity,
+  }
 });
 
 const pflichtbereichListe = computed(() => {
@@ -97,4 +104,17 @@ const chosenInOtherModules = computed(() =>
 const chosableModules = computed(() =>
   chosableIds.value.map((id) => state().getModulById(id))
 );
+
+function exedsLimit(modul: Modul) {
+  return !canAcceptChoice(
+      modul.lp,
+      chosenModules.value.map((i) => i.lp),
+      state().getFach(props.slot)?.wahlbereiche[props.wahlbereichIndex] ?? {},
+      props.remainingLp
+    )
+}
+
+function addModul(modul: Modul) {
+  state().addModul(props.slot, modul.id, props.wahlbereichIndex);
+}
 </script>

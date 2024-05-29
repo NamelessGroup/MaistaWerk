@@ -5,7 +5,7 @@
         <span v-if="wahlbereich.p">Pflichtbereich</span>
         <div v-else>
           <div>Wahlbereich</div>
-          <div>{{ getRestrictionString(wahlbereich.w) }}</div>
+          <div>{{ getRestrictionString(wahlbereich.w, wahlbereich.t.map(i => state().getTeilleistungById(i).lp)) }}</div>
         </div>
       </div>
 
@@ -15,7 +15,7 @@
           :id="t"
           :checked="getCheckboxState(t, wahlbereich)"
           @input="(e) => check(t, wahlbereich, e?.target?.checked ?? false)"
-          :disabled="wahlbereich.p"
+          :disabled="shouldBeDisabled(t, wahlbereich)"
         />
         <label :for="t"
           >{{ state().getTeilleistungById(t).name }} ({{
@@ -35,6 +35,7 @@ import isPflichtbereich from "../utils/PflichtbereichChecker.ts";
 import state from "../store/store.ts";
 import getRestrictionString from "../utils/choiceRestrictionStringBuilder";
 import Wahlbereich from "../../../model/Wahlbereich";
+import { canAcceptChoice } from "../utils/choiceManagement";
 
 const props = defineProps({
   modul: {
@@ -65,10 +66,23 @@ function getCheckboxState(teilleistungId: string, wahlbereich: Wahlbereich2) {
   return wahlbereich.p || wahlbereich.t.includes(teilleistungId);
 };
 
+function shouldBeDisabled(teilleistungId: string, wahlbereich: Wahlbereich2) {
+  if (wahlbereich.p) return true
+  if (!state().getAllChosenModule.includes(props.modul.id)) return true
+  if (wahlbereich.t.includes(teilleistungId)) return false
+  
+  const remainingLP = props.modul.lp - wahlbereiche.value.map(
+      wb => Math.min(wb.w.maxLP, wb.t.map(t => state().getTeilleistungById(t).lp).reduce((a, b) => a + b, 0))
+    ).reduce((a, b) => a + b, 0);
+  const teilleistung = state().getTeilleistungById(teilleistungId);
+  return !canAcceptChoice(teilleistung.lp, wahlbereich.t.map(t => state().getTeilleistungById(t).lp), wahlbereich.w, remainingLP)
+
+}
+
 function check(teilleistungId: string, wahlbereich: Wahlbereich2, val: boolean) {
   if (wahlbereich.p) return;
   if (val) {
-    state().addTeilleistung(props.modul.id, teilleistungId, wahlbereich.i);
+    state().addTeilleistung(props.modul.id, teilleistungId, wahlbereich.i)
   } else {
     state().removeTeilleistung(props.modul.id, teilleistungId);
   }

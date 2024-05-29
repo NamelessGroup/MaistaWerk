@@ -26,7 +26,7 @@ const props = defineProps({
   }
 })
 
-const selectedFach = ref<Fach>({} as Fach)
+const selectedFach = ref('')
 
 function shouldBeDisabled(fach: Fach) {
   return [FachSlotNames.VT1, FachSlotNames.VT2, FachSlotNames.EF].some(f => state().getFach(f)?.name == fach.name)

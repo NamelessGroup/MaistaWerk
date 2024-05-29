@@ -12,18 +12,18 @@ export interface RestrictionInput {
   maxBestandteile?: number
 }
 
-export default function getRestrictionString(res: RestrictionInput): string {
+export default function getRestrictionString(res: RestrictionInput, lpList: number[]): string {
   const model = inputToModel(res)
   const point = restrictionPoint({min: model.minLP, max: model.maxLP})
   const bestandteile = restrictionPoint({min: model.minBestandteile, max: model.maxBestandteile})
   if (point && bestandteile) {
-    return point + ' LP und ' + bestandteile + ' Bestandteile'
+    return `${lpList.reduce((a,b)=>a+b,0)} / ${point} LP und ${lpList.length} / ${bestandteile} Bestandteile`
   }
   if (point) {
-    return point + ' LP'
+    return `${lpList.reduce((a,b)=>a+b,0)} / ${point} LP`
   }
   if (bestandteile) {
-    return bestandteile + ' Bestandteile'
+    return `${lpList.length} / ${bestandteile} Bestandteile`
   }
   return ''
 }
