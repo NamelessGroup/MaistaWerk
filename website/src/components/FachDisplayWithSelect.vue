@@ -8,13 +8,14 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref } from 'vue';
+import { PropType, ref, watch } from 'vue';
 import Fach from '../../../model/Fach';
 import FachDisplay from './FachDisplay.vue';
 import FachSlotNames from '../model/FachSlotNames';
 import fachNameBuilder from '../utils/fachNameBuilder';
+import state from '../store/store';
 
-defineProps({
+const props = defineProps({
   faecher: {
     type: Array<Fach>,
     required: true
@@ -27,4 +28,7 @@ defineProps({
 
 const selectedFach = ref<Fach>({} as Fach)
 
+watch(selectedFach, (newVal) => {
+  state().setFach(props.slot, newVal)
+})
 </script>
