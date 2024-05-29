@@ -1,6 +1,7 @@
 import Fach from "../../../model/Fach"
 import Modul from "../../../model/Module"
 import Teilleistung from "../../../model/Teilleistung"
+import FachSlotNames from "../model/FachSlotNames.ts";
 
 export default interface State {
   choices: ChosenState
@@ -10,6 +11,9 @@ export default interface State {
 // Should store the choices of the user
 export interface ChosenState {
   ueqPunkte: number
+  chosenFachToModule: Map<string, [string, number][]>
+  chosenModuleToTeilleistungenListe:Map<string,[string, number][]>
+  chosenFaecher:Map<FachSlotNames, Fach>
 }
 
 // Should store the data imported from the jsons
