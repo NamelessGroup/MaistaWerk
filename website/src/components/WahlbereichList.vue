@@ -32,7 +32,7 @@ const wahlbereicheCount = computed(
   () => state().getFach(props.slot)?.wahlbereiche.length ?? 0
 );
 const remainingLp = computed(() =>
-  Math.max(
+  Math.min(
     state().getMaximumLP - state().getTotalChosenLP,
     (state().getFach(props.slot)?.maxLP ?? 0) -
       (state()
