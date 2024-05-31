@@ -60,7 +60,7 @@ const state = defineStore('state', {
         },
         // returns the sum of all lp
         getTotalChosenLP(): number {
-            return [...this.choices.chosenFaecher.values()].map(i => Math.min(i.maxLP, this.choices.chosenFachToModule.get(i.name).map(i => this.getModulById(i[0]).lp).reduce((a,b) => a+b, 0))).reduce((a,b)=> a+b, 0)
+            return [...this.choices.chosenFaecher.values()].map(i => Math.min(i.maxLP, (this.choices.chosenFachToModule.get(i.name)?.map(i => this.getModulById(i[0]).lp).reduce((a,b) => a+b, 0) ?? Infinity))).reduce((a,b)=> a+b, 0)
         },
         getMaximumLP(): number {
             return 120
