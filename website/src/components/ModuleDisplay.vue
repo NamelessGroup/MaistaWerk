@@ -32,6 +32,13 @@ import Modul from "../../../model/Module";
 import ModuleBase from "./ModuleBase.vue";
 import ModulPopUp from "./ModulPopUp.vue";
 import ModuleChosenState from "../model/ui/ModuleChosenState";
+import sunSVG from '../assets/sun-solid.svg'
+import snowflakeSVG from '../assets/snowflake-solid.svg'
+import plusSVG from '../assets/plus-solid.svg'
+import errorSVG from '../assets/circle-exclamation-solid.svg'
+import minusSVG from '../assets/minus-solid.svg'
+import germanyFlag from '../assets/germany.png'
+import ukFlag from '../assets/united-kingdom.png'
 
 const props = defineProps({
   modul: {
@@ -59,9 +66,9 @@ function clickedActionButton(e: MouseEvent) {
 }
 
 function getActionButtonSource() {
-  if (props.chosenState == ModuleChosenState.CHOSABLE) return "src/assets/plus-solid.svg";
-  if (props.chosenState == ModuleChosenState.CHOSEN_IN_THIS) return "src/assets/minus-solid.svg";
-  if (props.chosenState == ModuleChosenState.CHOSEN_IN_OTHER) return "src/assets/circle-exclamation-solid.svg";
+  if (props.chosenState == ModuleChosenState.CHOSABLE) return plusSVG
+  if (props.chosenState == ModuleChosenState.CHOSEN_IN_THIS) return minusSVG
+  if (props.chosenState == ModuleChosenState.CHOSEN_IN_OTHER) return errorSVG
   return "";
 }
 
@@ -86,9 +93,9 @@ const compLanguage = computed(() => {
 function getLangImage(lang: Lang) {
   switch (lang) {
     case Lang.EN:
-      return '/src/assets/united-kingdom.png'
+      return ukFlag
     case Lang.DE:
-      return '/src/assets/germany.png'
+      return germanyFlag
     default:
       return ''
   }
@@ -107,9 +114,9 @@ const compSemester = computed(() => {
 function getSemesterImage(semester: Semester) {
   switch (semester) {
     case Semester.WiSe:
-      return '/src/assets/snowflake-solid.svg'
+      return snowflakeSVG
     case Semester.SoSe:
-      return '/src/assets/sun-solid.svg'
+      return sunSVG
     default:
       return ''
   }
