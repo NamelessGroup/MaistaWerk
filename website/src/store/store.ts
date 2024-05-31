@@ -90,7 +90,12 @@ const state = defineStore('state', {
 
         // for saving and restoring
         getChoicesAsJsonString(): string {
-            return JSON.stringify(this.choices)
+            return JSON.stringify({
+                ueqPunkte: this.choices.ueqPunkte,
+                chosenFachToModule: mapToRecord(this.choices.chosenFachToModule, k => k),
+                chosenFaecher: mapToRecord(this.choices.chosenFaecher, k => k.valueOf()),
+                chosenModuleToTeilleistungenListe: mapToRecord(this.choices.chosenModuleToTeilleistungenListe, k => k)
+            })
         }
     },
     actions: {
@@ -143,7 +148,13 @@ const state = defineStore('state', {
 
         // for saving and restoring
         loadChoicesFromJsonString(json: string) {
-            this.choices = JSON.parse(json)
+            const recordChoices = JSON.parse(json)
+            this.choices = {
+                ueqPunkte: recordChoices.ueqPunkte,
+                chosenFachToModule: recordToMap(recordChoices.chosenFachToModule, k => k),
+                chosenFaecher: recordToMap(recordChoices.chosenFaecher, k => k as FachSlotNames),
+                chosenModuleToTeilleistungenListe: recordToMap(recordChoices.chosenModuleToTeilleistungenListe, k => k)
+            }
         }
     }
 })
@@ -156,4 +167,20 @@ function arrayToMap<V>(vs: V[], toKeyFunction: ((v: V) => string)): Map<string, 
         map.set(toKeyFunction(v), v)
     }
     return map
+}
+
+function recordToMap<K,V>(record: Record<string,V>, stringToKey: ((k:string)=>K)): Map<K,V> {
+    const map: Map<K,V> = new Map()
+    for (const k in record) {
+        map.set(stringToKey(k), record[k])
+    }
+    return map
+}
+
+function mapToRecord<K,V>(map: Map<K,V>, keyToString: ((k:K)=>string)): Record<string,V> {
+    const record: Record<string,V> = {}
+    for (const [k,v] of map) {
+        record[keyToString(k)] = v
+    }
+    return record
 }
