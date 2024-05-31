@@ -1,5 +1,6 @@
 <template>
   <ModuleBase
+    class="cursor-pointer"
     :name="modul.name"
     :semester="modul.turnus"
     :language="modul.sprache"
