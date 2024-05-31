@@ -2,7 +2,7 @@ const stammmodule = [
   "Mensch-Maschine-Interaktion",
   "Formale Systeme",
   "Telematik",
-  "RechnerStrukturen",
+  "Rechnerstrukturen",
   "Softwaretechnick II",
   "Computergrafik",
   "Robotik I",

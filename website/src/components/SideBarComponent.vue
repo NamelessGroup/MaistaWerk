@@ -137,8 +137,8 @@ const ueQLP = computed({
 
 const chosenStammmodule = computed(() =>
   state().getAllChosenModule.filter((modul) =>
-    stammmodule.some((stamm) =>
-      state().getModulById(modul).name.includes(stamm)
+    stammmodule.some((stamm) => 
+      state().getModulById(modul).name .trim() == stamm
     )
   ).map((modul) => state().getModulById(modul)).slice(0, 4)
 );
