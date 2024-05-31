@@ -13,8 +13,8 @@
       <div class="space-y-5 flex-grow">
         <ModuleBase class="m-2" :name="state().getTotalChosenLP + ' LP'">
           <div>
-            <div>WiSe: {{ wiSeLP }} LP</div>
-            <div>SoSe: {{ soSeLP }} LP</div>
+            <div>WiSe: {{ semesterLP.wiSe }} LP</div>
+            <div>SoSe: {{ semesterLP.soSe }} LP</div>
           </div>
         </ModuleBase>
 
@@ -97,31 +97,34 @@ import { computed, ref } from "vue";
 import ModuleBase from "./ModuleBase.vue";
 import state from "../store/store";
 import stammmodule from "../model/Stammmodule";
-import Modul from "../../../model/Module";
 
 const allModule = computed(() =>
   state().getAllChosenModule.map((modul) => state().getModulById(modul))
 );
 
-const soSeLP = computed(() =>
-  getLPCount(
-    allModule.value.filter((modul) =>
-      modul.name.toLocaleLowerCase().includes("sommer")
-    )
-  )
-);
-
-const wiSeLP = computed(() =>
-  getLPCount(
-    allModule.value.filter((modul) =>
-      modul.name.toLocaleLowerCase().includes("winter")
-    )
-  )
-);
-
-function getLPCount(module: Modul[]) {
-  return module.reduce((acc, modul) => acc + modul.lp, 0);
-}
+const semesterLP = computed(() => {
+  let soSe = 0
+  let wiSe = 0
+  for (const modul of allModule.value) {
+    if (modul.turnus.toLocaleLowerCase().includes('sommer')) {
+      soSe += modul.lp
+    } else if (modul.turnus.toLocaleLowerCase().includes('winter')) {
+      wiSe += modul.lp
+    } else {
+      for (let i = 0; i < modul.wahlbereiche.length; i++) {
+        const teilleistungen = state().getChosenTeilleistungenForModul(modul.id, i).map(t => state().getTeilleistungById(t))
+        for (const teilleistung of teilleistungen) {
+          if (teilleistung.turnus.toLocaleLowerCase().includes('sommer')) {
+            soSe += teilleistung.lp
+          } else if (teilleistung.turnus.toLocaleLowerCase().includes('winter')) {
+            wiSe += teilleistung.lp
+          }
+        }
+      }
+    }
+  }
+  return { soSe, wiSe }
+})
 
 const collapsed = ref(false);
 
