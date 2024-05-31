@@ -1,0 +1,33 @@
+name: Upload website on release
+on:
+  workflow_dispatch:
+  release:
+    types: [created, published]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Run parser 🔧
+        working-directory: parser
+        run: |
+          npm install
+          npm run parse
+
+      - name: Build website 🔧
+        working-directory: website
+        run: |
+          npm install
+          npm run build
+          
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.6.1
+        with:
+          branch: gh-pages
+          folder: website/dist
