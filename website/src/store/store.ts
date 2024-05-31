@@ -127,7 +127,7 @@ const state = defineStore('state', {
             this.choices.chosenModuleToTeilleistungenListe.set(id, [])
             this.getModulById(id).wahlbereiche.forEach((w,i) => {
                 if (isPflichtbereich(w, this.getTeilleistungById)) {
-                    w.modulliste.forEach(m => this.addTeilleistung(fachSlot, m, i))
+                    w.modulliste.forEach(m => this.addTeilleistung(id, m, i))
                 }
             })
             return true

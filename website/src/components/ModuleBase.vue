@@ -6,7 +6,7 @@
     }"
   >
     <div class="flex flex-wrap gap-2">
-      <h1 class="flex-1 font-bold">{{ name }}</h1>
+      <h1 class="flex-1 font-bold">{{ name }}</h1> <span><img v-if="!isComleted" class="h-4" src="../assets/triangle-exclamation-solid.svg"/></span>
     </div>
     <div class="text-xs">
       <slot></slot>
@@ -28,6 +28,11 @@ defineProps({
     type: Number as PropType<ModuleChosenState>,
     required: false,
     default: ModuleChosenState.PFLICHT
+  },
+  isComleted: {
+    type: Boolean,
+    required: false,
+    default: true
   }
 })
 </script>

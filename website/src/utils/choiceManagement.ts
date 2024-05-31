@@ -12,9 +12,10 @@ export function canAcceptChoice(choiceLP: number, currentLP: number[], choice: R
 
 export function areRestrictionFulfilled(currentLP: number[], choice: RestrictionInput) {
   const restrictions = inputToModel(choice)
+  if (isNaN(restrictions.minLP) && isNaN(restrictions.minBestandteile)) return true
   const lpSum = currentLP.reduce((a, b) => a + b, 0)
-  if (currentLP.length < restrictions.minBestandteile) return false
-  if (currentLP.length > restrictions.maxBestandteile) return false
-  if (lpSum < restrictions.minLP) return false
-  return false
+  
+  if (!isNaN(restrictions.minBestandteile) && currentLP.length < restrictions.minBestandteile) return false
+  if (!isNaN(restrictions.minLP) && lpSum < restrictions.minLP) return false
+  return true
 }

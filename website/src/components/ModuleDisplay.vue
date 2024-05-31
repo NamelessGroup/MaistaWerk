@@ -5,6 +5,7 @@
     :language="modul.sprache"
     @click="setVisible()"
     :chosen-state="chosenState"
+    :is-comleted="allChildrenFulfiled"
   >
     <div class="grid grid-rows-[auto_auto] grid-cols-[auto_1fr_auto] gap-x-5">
       <div class="row-start-1 col-start-1">{{ modul.lp }} LP</div>
@@ -39,6 +40,8 @@ import errorSVG from '../assets/circle-exclamation-solid.svg'
 import minusSVG from '../assets/minus-solid.svg'
 import germanyFlag from '../assets/germany.png'
 import ukFlag from '../assets/united-kingdom.png'
+import { areRestrictionFulfilled } from "../utils/choiceManagement";
+import state from "../store/store";
 
 const props = defineProps({
   modul: {
@@ -58,6 +61,19 @@ const popUpVisible = ref(false);
 function setVisible() {
   if (props.chosenState != ModuleChosenState.CHOSEN_IN_OTHER) popUpVisible.value = true
 }
+
+const allChildrenFulfiled = computed(() => {
+  if (props.chosenState != ModuleChosenState.CHOSEN_IN_THIS && props.chosenState != ModuleChosenState.PFLICHT) return true
+  for (let i = 0; i < props.modul.wahlbereiche.length; i++) {
+    if (!areRestrictionFulfilled(
+      state().getChosenTeilleistungenForModul(props.modul.id, i).map(t => state().getTeilleistungById(t).lp),
+      props.modul.wahlbereiche[i])
+    ) {
+      return false
+    }
+  }
+  return true
+})
 
 function clickedActionButton(e: MouseEvent) {
   e.stopPropagation();
