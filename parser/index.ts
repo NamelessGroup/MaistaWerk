@@ -7,7 +7,7 @@ import writeToFile from "./fileWriting";
 
 const MODULHANDBUCH_URL =
   "https://www.informatik.kit.edu/downloads/stud/SS24_MSc_2023_MHB_2024_04_03_de_html.html";
-const RESULT_BASE_FOLDER_NAME = "result";
+const RESULT_BASE_FOLDER_NAME = "../website/src/data";
 const VERTIEFUNGSFACH_FILE_NAME = "vertiefung.json";
 const WAHLBEREICH_FILE_NAME = "wahlbereich.json";
 const ERGANZUNGFACH_FILE_NAME = "erganzungsfach.json";
@@ -44,7 +44,7 @@ const vertiefungsfacher = fachListe.filter((e) =>
   e.name.startsWith("Vertiefungsfach")
 );
 const erganzungsfach = fachListe.filter((e) =>
-  e.name.startsWith("Ergängzungsfach")
+  e.name.startsWith("Ergänzungsfach")
 );
 const wahlbereich = fachListe.filter((e) =>
   e.name.startsWith("Wahlbereich")
@@ -88,3 +88,6 @@ console.log(
     postTeilleistungParseTime - postFetchTime
   }ms`
 );
+
+const temp = module.filter((e) => e.name.includes("Meteorology") || e.wahlbereiche.length >= 2);
+writeToFile(temp, [RESULT_BASE_FOLDER_NAME, "temp.json"]);
