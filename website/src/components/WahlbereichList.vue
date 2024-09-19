@@ -4,12 +4,14 @@
     :wahlbereich-index="0"
     :slot="slot"
     :remaining-lp="remainingLp"
+      :filter="filter"
   />
   <div v-else>
     <WahlbereichDisplay
       v-for="index in wahlbereicheCount"
       :wahlbereich-index="index - 1"
       :slot="slot"
+      :filter="filter"
     />
   </div>
 </template>
@@ -20,12 +22,17 @@ import ModulleList from "./ModulleList.vue";
 import WahlbereichDisplay from "./WahlbereichDisplay.vue";
 import FachSlotNames from "../model/FachSlotNames";
 import state from "../store/store";
+import { FilterState } from "../model/ui/FilterState";
 
 const props = defineProps({
   slot: {
     type: String as PropType<FachSlotNames>,
     required: true,
   },
+  filter: {
+    type: Object as PropType<FilterState>,
+    required: true,
+  }
 });
 
 const wahlbereicheCount = computed(

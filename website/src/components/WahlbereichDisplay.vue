@@ -2,7 +2,7 @@
   <div>
     <h1 class="text-lg font-bold px-2">{{name}}</h1>
     <p class="font-bold px-2" v-if="name != 'Pflichtbereich'">{{getRestrictionString(wahlbereich, lpList)}}</p>
-    <ModulleList :slot="slot" :wahlbereich-index="wahlbereichIndex" :remaining-lp="remainingLp" />
+    <ModulleList :slot="slot" :wahlbereich-index="wahlbereichIndex" :remaining-lp="remainingLp" :filter="filter" />
   </div>
 </template>
 
@@ -13,6 +13,7 @@ import getRestrictionString from '../utils/choiceRestrictionStringBuilder';
 import ModulleList from './ModulleList.vue';
 import FachSlotNames from '../model/FachSlotNames';
 import state from '../store/store';
+import { FilterState } from '../model/ui/FilterState';
 
 const props = defineProps({
   wahlbereichIndex: {
@@ -22,6 +23,10 @@ const props = defineProps({
   slot: {
     type: String as PropType<FachSlotNames>,
     required: true
+  },
+  filter: {
+    type: Object as PropType<FilterState>,
+    required: true,
   }
 })
 
