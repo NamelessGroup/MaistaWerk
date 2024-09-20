@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-primary-900 border rounded border-primary-500 z-20 p-2 space-y-2"
+    class="bg-primary-900 border rounded border-primary-500 z-10 p-2 space-y-2"
   >
     <input
       type="text"
@@ -10,13 +10,14 @@
     />
     <div class="flex space-x-2">
       <label for="minLP">LP min:</label>
-      <input type="number" id="minLP" v-model="minEcts" class="w-14" min="0" :max="maxEcts-1" />
+      <input type="number" id="minLP" v-model="minEcts" class="w-14 cursor-text" min="0" :max="maxEcts-1" />
       <label for="maxLP">max:</label>
-      <input type="number" id="maxLP" v-model="maxEcts" class="w-14" :min="minEcts+1" max="25" />
+      <input type="number" id="maxLP" v-model="maxEcts" class="w-14 cursor-text" :min="minEcts+1" max="25" />
     </div>
     <div class="flex space-x-2">
       <label for="stammmoduleOnly">Nur Stammmodule:</label>
       <input
+        class="cursor-pointer"
         type="checkbox"
         id="stammmoduleOnly"
         v-model="stammmoduleOnly"
@@ -25,7 +26,7 @@
     <div class="grid gap-2 w-fit">
       <img
         :src="snowflakeSVG"
-        class="h-6 row-start-1 col-start-1"
+        class="h-6 row-start-1 col-start-1 cursor-pointer"
         :class="
           filterState.semester.includes('WiSe') ? 'opacity-100' : 'opacity-50'
         "
@@ -33,7 +34,7 @@
       />
       <img
         :src="sunSVG"
-        class="h-6 row-start-1 col-start-2"
+        class="h-6 row-start-1 col-start-2 cursor-pointer"
         :class="
           filterState.semester.includes('SoSe') ? 'opacity-100' : 'opacity-50'
         "
@@ -41,7 +42,7 @@
       />
       <img
         :src="questionSVG"
-        class="h-6 row-start-1 col-start-3"
+        class="h-6 row-start-1 col-start-3 cursor-pointer"
         :class="
           filterState.semester.includes('unknown')
             ? 'opacity-100'
@@ -52,7 +53,7 @@
 
       <img
         :src="germanFlag"
-        class="h-6 row-start-2 col-start-1"
+        class="h-6 row-start-2 col-start-1 cursor-pointer"
         :class="
           filterState.language.includes('De') ? 'grayscale-[40%] opacity-100' : 'grayscale opacity-50'
         "
@@ -60,7 +61,7 @@
       />
       <img
         :src="ukFlag"
-        class="h-6 grayscale row-start-2 col-start-2"
+        class="h-6 grayscale row-start-2 col-start-2 cursor-pointer"
         :class="
           filterState.language.includes('Eng') ? 'grayscale-[40%] opacity-100' : 'grayscale opacity-50'
         "
@@ -68,7 +69,7 @@
       />
       <img
         :src="questionSVG"
-        class="h-6 row-start-2 col-start-3"
+        class="h-6 row-start-2 col-start-3 cursor-pointer"
         :class="
           filterState.language.includes('unknown')
             ? 'opacity-100'
@@ -79,7 +80,7 @@
     </div>
     <div class="flex space-x-2">
       <label for="sorting">Sort by:</label>
-      <select id="sorting" v-model="sortBy">
+      <select id="sorting" v-model="sortBy" class="cursor-pointer">
         <option v-for="option in sortingOptions" :value="option">
           {{ option }}
         </option>

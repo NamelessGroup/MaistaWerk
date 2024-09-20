@@ -4,7 +4,7 @@
     <div class="flex">
       <h1 class="font-bold text-xl flex-1">{{ slot }}</h1>
       <div>
-        <img :src="filterSVG" class="h-6" @click="showFilter = !showFilter" ref="filterElement" />
+        <img :src="filterSVG" class="h-6 cursor-pointer" @click="showFilter = !showFilter" ref="filterElement" />
         <FilterComponent v-if="showFilter" v-model:filter="filterState" v-model:sorting="sortingState" class="absolute" :class="showFilterLeft ? 'translate-x-[-19.5rem]' : ''" />
       </div>
     </div>
