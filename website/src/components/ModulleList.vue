@@ -49,6 +49,7 @@ import Modul from "../../../model/Module";
 import { canAcceptChoice } from "../utils/choiceManagement";
 import { FilterState } from "../model/ui/FilterState";
 import Stammmodule from "../model/Stammmodule";
+import { SortingOptions, SortingState } from "../model/ui/SortingState";
 
 const props = defineProps({
   slot: {
@@ -66,6 +67,10 @@ const props = defineProps({
   },
   filter: {
     type: Object as PropType<FilterState>,
+    required: true,
+  },
+  sorting: {
+    type: Object as PropType<SortingState>,
     required: true,
   },
 });
@@ -108,13 +113,17 @@ const chosenInOtherModules = computed(() =>
   chosenInOtherModulesIds.value.map((id) => state().getModulById(id))
 );
 const filteredChosenInOtherModules = computed(() =>
-  chosenInOtherModules.value.filter(applyFilter)
+  chosenInOtherModules.value.filter(applyFilter).sort((a, b) =>
+    sort(a, b, props.sorting.sortBy) * props.sorting.direction
+  )
 );
 const chosableModules = computed(() =>
   chosableIds.value.map((id) => state().getModulById(id))
 );
 const filteredChosableModules = computed(() =>
-  chosableModules.value.filter(applyFilter)
+  chosableModules.value.filter(applyFilter).sort((a, b) =>
+    sort(a, b, props.sorting.sortBy) * props.sorting.direction
+  )
 );
 
 function exedsLimit(modul: Modul) {
@@ -172,5 +181,22 @@ function applyFilter(modul: Modul) {
   return searchParts.some((searchPart) => {
     return nameParts.some(n => n.includes(searchPart));
   });
+}
+
+function sort(a: Modul, b: Modul, sorting: SortingOptions) {
+  switch (sorting) {
+    case SortingOptions.NAME:
+      return a.name.localeCompare(b.name);
+    case SortingOptions.ECTS:
+      return a.lp - b.lp;
+    case SortingOptions.DOZENT:
+      return a.verantwortlicher.localeCompare(b.verantwortlicher);
+    case SortingOptions.SEMSTER:
+      return b.turnus.localeCompare(a.turnus);
+    case SortingOptions.SPRACHE:
+      return b.sprache.localeCompare(a.sprache);
+    default:
+      return 0;
+  }
 }
 </script>

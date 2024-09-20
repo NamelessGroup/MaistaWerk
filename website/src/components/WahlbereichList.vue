@@ -5,6 +5,7 @@
     :slot="slot"
     :remaining-lp="remainingLp"
       :filter="filter"
+      :sorting="sorting"
   />
   <div v-else>
     <WahlbereichDisplay
@@ -12,6 +13,7 @@
       :wahlbereich-index="index - 1"
       :slot="slot"
       :filter="filter"
+      :sorting="sorting"
     />
   </div>
 </template>
@@ -23,6 +25,7 @@ import WahlbereichDisplay from "./WahlbereichDisplay.vue";
 import FachSlotNames from "../model/FachSlotNames";
 import state from "../store/store";
 import { FilterState } from "../model/ui/FilterState";
+import { SortingState } from "../model/ui/SortingState";
 
 const props = defineProps({
   slot: {
@@ -31,6 +34,10 @@ const props = defineProps({
   },
   filter: {
     type: Object as PropType<FilterState>,
+    required: true,
+  },
+  sorting: {
+    type: Object as PropType<SortingState>,
     required: true,
   }
 });

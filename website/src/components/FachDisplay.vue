@@ -5,7 +5,7 @@
       <h1 class="font-bold text-xl flex-1">{{ slot }}</h1>
       <div>
         <img :src="filterSVG" class="h-6" @click="showFilter = !showFilter" ref="filterElement" />
-        <FilterComponent v-if="showFilter" v-model="filterState" class="absolute" :class="showFilterLeft ? 'translate-x-[-19.5rem]' : ''" />
+        <FilterComponent v-if="showFilter" v-model:filter="filterState" v-model:sorting="sortingState" class="absolute" :class="showFilterLeft ? 'translate-x-[-19.5rem]' : ''" />
       </div>
     </div>
     <div>{{getRestrictionString(fach ?? {}, lpListForFach)}}</div>
@@ -13,7 +13,7 @@
   </div>
   <div class="overflow-y-auto flex-grow">
     <div class="min-h-6" v-if="!$slots.default"><!--Empty space--></div>
-    <WahlbereichList :slot="slot" :filter="filterState" />
+    <WahlbereichList :slot="slot" :filter="filterState" :sorting="sortingState" />
   </div>
 </div>
 </template>
@@ -27,6 +27,7 @@ import getRestrictionString from '../utils/choiceRestrictionStringBuilder';
 import filterSVG from '../assets/filter-solid.svg';
 import FilterComponent from './FilterComponent.vue';
 import { FilterState } from '../model/ui/FilterState';
+import { SortingOptions, SortingState } from '../model/ui/SortingState';
 
 const props = defineProps({
   slot: {
@@ -51,6 +52,11 @@ const filterState: Ref<FilterState> = ref({
   stammmoduleOnly: false,
   semester: ['SoSe', 'WiSe', 'unknown'],
   language: ['De', 'Eng', 'unknown']
+})
+
+const sortingState: Ref<SortingState> = ref({
+  sortBy: SortingOptions.NAME,
+  direction: 1 as 1|-1
 })
 
 const windowWidth = computed(() => window.innerWidth)

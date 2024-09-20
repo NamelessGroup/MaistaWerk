@@ -77,74 +77,92 @@
         @click="changeLanguage('unknown')"
       />
     </div>
-    <div class="flex space-x-2"></div>
-    <div class="flex space-x-2"></div>
+    <div class="flex space-x-2">
+      <label for="sorting">Sort by:</label>
+      <select id="sorting" v-model="sortBy">
+        <option v-for="option in sortingOptions" :value="option">
+          {{ option }}
+        </option>
+      </select>
+      <button @click="sortingDirection  = ((sortingDirection*(-1)) as 1|-1)">
+        <img :src="arrowDownSVG" class="h-4" v-if="sortingDirection == 1" />
+        <img :src="arrowUpSVG" class="h-4" v-else />
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, ref } from "vue";
+import { computed, PropType, Ref, ref } from "vue";
 import { FilterState, Language, Semester } from "../model/ui/FilterState";
 import sunSVG from "../assets/sun-solid.svg";
 import snowflakeSVG from "../assets/snowflake-solid.svg";
 import germanFlag from "../assets/germany.png";
 import ukFlag from "../assets/united-kingdom.png";
 import questionSVG from "../assets/question-solid.svg";
+import arrowDownSVG from "../assets/arrow-down-1-9-solid.svg";
+import arrowUpSVG from "../assets/arrow-up-9-1-solid.svg";
+import { SortingOptions, SortingState } from "../model/ui/SortingState";
 
 const props = defineProps({
-  modelValue: {
+  filter: {
     type: Object as PropType<FilterState>,
+    required: true,
+  },
+  sorting: {
+    type: Object as PropType<SortingState>,
     required: true,
   },
 });
 
-const emit = defineEmits(["update:modelValue"]);
+
+const emit = defineEmits(["update:filter", "update:sorting"]);
 
 const _filterState = ref({} as Partial<FilterState>);
 const filterState = computed({
   get: () => {
     return {
       searchString:
-        _filterState.value.searchString ?? props.modelValue.searchString,
-      minEcts: _filterState.value.minEcts ?? props.modelValue.minEcts,
-      maxEcts: _filterState.value.maxEcts ?? props.modelValue.maxEcts,
+        _filterState.value.searchString ?? props.filter.searchString,
+      minEcts: _filterState.value.minEcts ?? props.filter.minEcts,
+      maxEcts: _filterState.value.maxEcts ?? props.filter.maxEcts,
       stammmoduleOnly:
-        _filterState.value.stammmoduleOnly ?? props.modelValue.stammmoduleOnly,
-      semester: _filterState.value.semester ?? props.modelValue.semester,
-      language: _filterState.value.language ?? props.modelValue.language,
+        _filterState.value.stammmoduleOnly ?? props.filter.stammmoduleOnly,
+      semester: _filterState.value.semester ?? props.filter.semester,
+      language: _filterState.value.language ?? props.filter.language,
     };
   },
   set: (val: FilterState) => {
     _filterState.value = val;
-    emit("update:modelValue", val);
+    emit("update:filter", val);
   },
 });
 const searchString = computed({
   get: () => filterState.value.searchString,
   set: (val: string) => {
     _filterState.value.searchString = val;
-    emit("update:modelValue", filterState.value);
+    emit("update:filter", filterState.value);
   },
 });
 const minEcts = computed({
   get: () => filterState.value.minEcts,
   set: (val: number) => {
     _filterState.value.minEcts = val;
-    emit("update:modelValue", filterState.value);
+    emit("update:filter", filterState.value);
   },
 });
 const maxEcts = computed({
   get: () => filterState.value.maxEcts,
   set: (val: number) => {
     _filterState.value.maxEcts = val;
-    emit("update:modelValue", filterState.value);
+    emit("update:filter", filterState.value);
   },
 });
 const stammmoduleOnly = computed({
   get: () => filterState.value.stammmoduleOnly,
   set: (val: boolean) => {
     _filterState.value.stammmoduleOnly = val;
-    emit("update:modelValue", filterState.value);
+    emit("update:filter", filterState.value);
   }
 });
 
@@ -166,10 +184,39 @@ function changeLanguage(language: Language) {
     filterState.value.language.splice(idx, 1);
   }
 }
+
+const sortingOptions = [SortingOptions.NAME, SortingOptions.ECTS, SortingOptions.DOZENT, SortingOptions.SEMSTER, SortingOptions.SPRACHE];
+const _sortBy: Ref<SortingOptions | undefined> = ref(undefined); 
+const sortBy = computed({
+  get: () => {
+    return _sortBy.value ?? props.sorting.sortBy;
+  },
+  set: (val: SortingOptions) => {
+    _sortBy.value = val;
+    emit("update:sorting", {
+      sortBy: val,
+      direction: sortingDirection.value
+    });
+  }
+});
+const _sortingDirection: Ref<1 | -1 | undefined> = ref(undefined);
+const sortingDirection = computed({
+  get: () => {
+    return _sortingDirection.value ?? props.sorting.direction;
+  },
+  set: (val: 1 | -1) => {
+    _sortingDirection.value = val;
+    emit("update:sorting", {
+      sortBy: sortBy.value,
+      direction: val
+    });
+  }
+});
+console.log(sortingDirection.value, _sortingDirection.value);
 </script>
 
 <style scoped>
-input {
+input, select, button {
   @apply bg-primary-800 text-white rounded-sm px-2;
 }
 </style>
