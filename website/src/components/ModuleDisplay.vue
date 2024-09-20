@@ -140,8 +140,8 @@ function getSemesterImage(semester: Semester) {
 }
 
 function getDozentName() {
-  const r = /(PD|Prof\.) Dr. (.* )?(.*)/.exec(props.modul.verantwortlicher)
-  if (r) return r[3]
+  const r = /((Prof|Dr|PD|TT-Prof|rer|nat|Dipl)\.?)+[ -](.* )([^ ]*)$/i.exec(props.modul.verantwortlicher)
+  if (r) return r[r.length - 1]
   return props.modul.verantwortlicher
 }
 </script>
