@@ -4,6 +4,7 @@ import parseFach from "./parseComponents/FachParser";
 import parseModule from "./parseComponents/ModuleParser";
 import parseTeilleistungen from "./parseComponents/TeilleistungParser";
 import writeToFile from "./fileWriting";
+import parseMetaData from "./parseComponents/MetaDataParser";
 
 const MODULHANDBUCH_URL =
   "https://www.informatik.kit.edu/downloads/stud/88-079-H-2023_v1_2024-09-19_de.html";
@@ -13,6 +14,7 @@ const WAHLBEREICH_FILE_NAME = "wahlbereich.json";
 const ERGANZUNGFACH_FILE_NAME = "erganzungsfach.json";
 const MODULE_FILE_NAME = "module.json";
 const TEILLEISTUNGEN_FILE_NAME = "teilleistungen.json";
+const METADATA_FILE_NAME = "metadata.json";
 
 console.log("Fetching content...");
 const startTime = Date.now();
@@ -21,7 +23,8 @@ const browser = new Browser();
 const page = browser.newPage();
 page.content = content;
 
-let body = page.mainFrame.document.body.children[2];
+const document = page.mainFrame.document
+let body = document.body.children[2];
 body = body.children[body.childElementCount - 1];
 
 const STRUCTURE_TABLE_HEADING = "Aufbau des Studiengangs";
@@ -31,6 +34,7 @@ const TEILLEISTUNGEN_HEADER = "Teilleistungen";
 const bodyParser = new DomParser(body);
 const postFetchTime = Date.now();
 console.log(`Fetched content in ${postFetchTime - startTime}ms`);
+
 
 console.log("Parsing Fach list...");
 const fachListeStart =
@@ -68,6 +72,14 @@ console.log(
   `Parsed Teilleistungs list in ${postTeilleistungParseTime - postModuleParseTime}ms`
 );
 
+console.log("Parsing Metadata....");
+const metadata = parseMetaData(document.getElementsByClassName("subtitle")[0]);
+const postMetadataParseTime = Date.now();
+console.log(
+  `Parsed Metadata in ${postMetadataParseTime - postTeilleistungParseTime}ms`
+);
+const parseEndTime = postMetadataParseTime
+
 console.log("Start writing files...");
 writeToFile(vertiefungsfacher, [
   RESULT_BASE_FOLDER_NAME,
@@ -80,12 +92,13 @@ writeToFile(teilleistungen, [
   RESULT_BASE_FOLDER_NAME,
   TEILLEISTUNGEN_FILE_NAME,
 ]);
+writeToFile(metadata, [RESULT_BASE_FOLDER_NAME, METADATA_FILE_NAME])
 const postWriteTime = Date.now();
-console.log(`Wrote files in ${postWriteTime - postTeilleistungParseTime}ms`);
+console.log(`Wrote files in ${postWriteTime - parseEndTime}ms`);
 
 console.log(
   `Process took ${postWriteTime - startTime}ms. Parsing took ${
-    postTeilleistungParseTime - postFetchTime
+    parseEndTime - postFetchTime
   }ms`
 );
 

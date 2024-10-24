@@ -9,8 +9,8 @@
       </button>
     </div>
 
-    <div v-if="!collapsed" class="space-y-5 flex-grow flex flex-col">
-      <div class="space-y-5 flex-grow">
+    <div v-if="!collapsed" class="space-y-3 flex-grow flex flex-col">
+      <div class="space-y-3 flex-grow">
         <ModuleBase class="m-2" :name="state().getTotalChosenLP + ' LP'">
           <div>
             <div>WiSe: {{ semesterLP.wiSe }} LP</div>
@@ -18,7 +18,7 @@
           </div>
         </ModuleBase>
 
-        <div class="space-y-2 p-2">
+        <div class="space-y-3 p-2">
           <ModuleBase name="Masterarbeit">30 LP</ModuleBase>
           <ModuleBase class="max-w-44" name="Überfachliche Qualifikationen">
             <div class="w-full flex gap-1">
@@ -86,6 +86,8 @@
             >Modulhandbuch</a
           >
           generiert. Einige Vorraussetzungen werden nicht automatisch geprüft.
+          <br>
+          Stand: {{ state().modulhandbuch.metaData.stand.split(' ')[1] }} / {{ shortenSemesterName(state().modulhandbuch.metaData.semester) }} / {{ state().modulhandbuch.metaData.spo }}
         </div>
       </div>
     </div>
@@ -184,5 +186,9 @@ function uploadFile() {
     }
   };
   input.click();
+}
+
+function shortenSemesterName(name: string) {
+  return name.replace(/[Ww]intersemester/, "WiSe").replace(/[Ss]ommersemester/, "SoSe");
 }
 </script>

@@ -1,4 +1,5 @@
 import Fach from "../../../model/Fach"
+import { MetaData } from "../../../model/MetaData.ts";
 import Modul from "../../../model/Module"
 import Teilleistung from "../../../model/Teilleistung"
 import FachSlotNames from "../model/FachSlotNames.ts";
@@ -23,4 +24,5 @@ export interface Modulhandbuch {
   ergaenzungsfaecher: Fach[]
   vertiefungsfaecher: Fach[]
   wahlbereich: Fach
+  metaData: MetaData
 }
