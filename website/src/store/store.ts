@@ -7,6 +7,7 @@ import Teilleistung from "../../../model/Teilleistung";
 import moduleJson from '../data/module.json'
 import teilleistungJson from "../data/teilleistungen.json";
 import wahlbereichJson from "../data/wahlbereich.json"
+import metadataJson from "../data/metadata.json"
 import ergaenzugsfaecherJson from "../data/erganzungsfach.json"
 import vertiefungsfaecherJson from "../data/vertiefung.json"
 import FachSlotNames from "../model/FachSlotNames";
@@ -31,7 +32,8 @@ const state = defineStore('state', {
             ergaenzungsfaecher: ergaenzugsfaecherJson as unknown as Fach[],
             wahlbereich: wahlbereichJson as unknown as Fach,
             module: arrayToMap<Modul>(moduleJson as unknown as Modul[], (v) => v.id),
-            teilleistungen: arrayToMap<Teilleistung>(teilleistungJson as unknown as Teilleistung[], (v) => v.id)
+            teilleistungen: arrayToMap<Teilleistung>(teilleistungJson as unknown as Teilleistung[], (v) => v.id),
+            metaData: metadataJson
         }
     }},
     getters: {
