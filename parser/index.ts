@@ -23,7 +23,8 @@ const browser = new Browser();
 const page = browser.newPage();
 page.content = content;
 
-let body = page.mainFrame.document.body.children[2];
+const document = page.mainFrame.document
+let body = document.body.children[2];
 body = body.children[body.childElementCount - 1];
 
 const STRUCTURE_TABLE_HEADING = "Aufbau des Studiengangs";
@@ -72,7 +73,7 @@ console.log(
 );
 
 console.log("Parsing Metadata....");
-const metadata = parseMetaData(page.mainFrame.document.getElementsByClassName("subtitle")[0]);
+const metadata = parseMetaData(document.getElementsByClassName("subtitle")[0]);
 const postMetadataParseTime = Date.now();
 console.log(
   `Parsed Metadata in ${postMetadataParseTime - postTeilleistungParseTime}ms`
