@@ -6,7 +6,7 @@ import parseTeilleistungen from "./parseComponents/TeilleistungParser";
 import writeToFile from "./fileWriting";
 
 const MODULHANDBUCH_URL =
-  "https://www.informatik.kit.edu/downloads/stud/SS24_MSc_2023_MHB_2024_04_03_de_html.html";
+  "https://www.informatik.kit.edu/downloads/stud/88-079-H-2023_v1_2024-09-19_de.html";
 const RESULT_BASE_FOLDER_NAME = "../website/src/data";
 const VERTIEFUNGSFACH_FILE_NAME = "vertiefung.json";
 const WAHLBEREICH_FILE_NAME = "wahlbereich.json";
