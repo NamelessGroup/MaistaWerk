@@ -50,6 +50,18 @@
           </div>
         </ModuleBase>
 
+        <ModuleBase
+          name="Praktika & Seminare"
+          class="m-2"
+        >
+          <div class="grid grid-cols-[auto_1fr_auto] gap-x-2">
+            <span>Summe:</span><span>{{ chosenSeminareECTS + chosenPraktikaECTS }}</span><span class="text-primary-400">(min 12, max 18)</span>
+            <span>Praktika:</span><span>{{ chosenPraktikaECTS }}</span><span class="text-primary-400">(min 6)</span>
+            <span>Seminare:</span><span>{{ chosenSeminareECTS }}</span><span class="text-primary-400">(min 3)</span>
+            <span class="text-primary-400 col-span-3 pt-3">Nur eine Schätzung: Mag Praktika und Seminare nicht korrekt erkennen.</span>
+          </div>
+        </ModuleBase>
+
         <div class="p-2 space-y-2">
           <button
             class="flex items-center w-full border rounded-md border-primary-500 bg-primary-700 p-1 gap-2"
@@ -143,6 +155,18 @@ const chosenStammmodule = computed(() =>
       state().getModulById(modul).name .trim() == stamm
     )
   ).map((modul) => state().getModulById(modul)).slice(0, 4)
+);
+
+const chosenSeminareECTS = computed(() =>
+  allModule.value.filter((modul) =>
+    modul.name.toLocaleLowerCase().includes("seminar")
+  ).reduce((acc, modul) => acc + modul.lp, 0)
+);
+
+const chosenPraktikaECTS = computed(() =>
+  allModule.value.filter((modul) =>
+    modul.name.toLocaleLowerCase().includes("praktikum")
+  ).reduce((acc, modul) => acc + modul.lp, 0)
 );
 
 function downloadFile() {
