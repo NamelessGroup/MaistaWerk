@@ -9,7 +9,7 @@
   "license": "MIT",
   "description": "",
   "devDependencies": {
-    "tsx": "^4.10.3"
+    "tsx": "^4.19.3"
   },
   "dependencies": {
     "fs": "^0.0.1-security",
