@@ -3,9 +3,9 @@ const stammmodule = [
   "Formale Systeme",
   "Telematik",
   "Rechnerstrukturen",
-  "Softwaretechnick II",
+  "Softwaretechnik II",
   "Computergrafik",
-  "Robotik I",
+  "Robotik I - Einführung in die Robotik",
   "Algorithmen II",
   "Fortgeschrittene Künstliche Intelligenz",
   "IT-Sicherheit"
