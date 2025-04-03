@@ -178,9 +178,14 @@ function applyFilter(modul: Modul) {
   }
   const searchParts = props.filter.searchString.toLocaleLowerCase().split(" ");
   const nameParts = modul.name.toLocaleLowerCase().split(" ");
-  return searchParts.some((searchPart) => {
+  const dozentParts = modul.verantwortlicher.toLocaleLowerCase().split(" ");
+  const nameSearch = searchParts.some((searchPart) => {
     return nameParts.some(n => n.includes(searchPart));
   });
+  const dozentSearch = searchParts.some((searchPart) => {
+    return dozentParts.some(d => d.includes(searchPart));
+  });
+  return nameSearch || dozentSearch;
 }
 
 function sort(a: Modul, b: Modul, sorting: SortingOptions) {
