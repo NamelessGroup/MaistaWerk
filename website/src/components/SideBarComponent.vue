@@ -78,6 +78,13 @@
             <img class="h-5" src="../assets/upload-solid.svg" />
             <div>Upload</div>
           </button>
+
+          <RouterLink
+            :to="goalRoute"
+            class="flex items-center w-full border rounded-md border-primary-500 bg-primary-700 p-1 gap-2"
+          >
+            {{goalRouteText}}
+          </RouterLink>
         </div>
       </div>
 
@@ -111,6 +118,7 @@ import { computed, ref } from "vue";
 import ModuleBase from "./ModuleBase.vue";
 import state from "../store/store";
 import stammmodule from "../model/Stammmodule";
+import { router } from "../router";
 
 const allModule = computed(() =>
   state().getAllChosenModule.map((modul) => state().getModulById(modul))
@@ -215,4 +223,31 @@ function uploadFile() {
 function shortenSemesterName(name: string) {
   return name.replace(/[Ww]intersemester/, "WiSe").replace(/[Ss]ommersemester/, "SoSe");
 }
+
+const goalRoute = computed(() => {
+  const name = router.currentRoute.value.name;
+  console.debug(name, router.getRoutes())
+  if (name == null) {
+    return "";
+  }
+  const route = router.getRoutes().find((route) => route.name !== name);
+  if (route == null) {
+    return "";
+  }
+  console.debug(route.path, route.name)
+  return route;
+})
+
+const goalRouteText = computed(() => {
+  const name = router.currentRoute.value.name;
+  if (name == null) {
+    return null;
+  }
+  if (name === "ModuleSelection") {
+    return "Modulwahl";
+  } else if (name === "SemesterOrganizer") {
+    return "Semester Organizer";
+  } 
+  return ""
+})
 </script>
