@@ -7,7 +7,10 @@
                 :id="i"
                 class="min-w-80" 
             />
-            <button class="flex items-center w-fit border rounded-md border-primary-500 bg-primary-800 py-1 px-2 gap-2 h-fit whitespace-nowrap" @click="semesterCount++">Semester hinzufügen</button>
+            <button class="flex items-center min-w-48 border rounded-md border-primary-500 bg-primary-800 p-1 gap-2 h-fit whitespace-nowrap" @click="semesterCount++">
+                <img class="h-5" src="../assets/plus-solid-white.svg" />
+                <div>Semester hinzufügen</div>
+            </button>
         </div>
         <ModuleBaseListe class="max-w-full w-full flex-1" />
     </div>

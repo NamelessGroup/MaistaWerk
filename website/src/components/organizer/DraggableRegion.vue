@@ -26,6 +26,7 @@ import { computed, ref, watch } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import state from '../../store/store';
 import DraggableModule from './DraggableModule.vue';
+import { customId, stringToModul } from '../../utils/CustomModul';
 
 const props = defineProps({
   id: {
@@ -38,7 +39,14 @@ const name = ref('Semester ' + props.id)
 
 const list = ref<string[]>([])
 
-const lps = computed(() => list.value.map(id => state().getModulById(id).lp).reduce((a, b) => a + b, 0))
+const lps = computed(() => list.value.map(getLp).reduce((a, b) => a + b, 0))
+
+function getLp(id: string) {
+  if (id.startsWith(customId)) {
+    return stringToModul(id).lp
+  }
+  return state().getModulById(id).lp
+}
 
 watch(list, (newList) => {
   state().choices.semesterToModulListe.set(props.id, newList)

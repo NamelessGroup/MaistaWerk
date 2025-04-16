@@ -20,6 +20,7 @@ import { computed } from 'vue';
 import ModuleBase from '../ModuleBase.vue';
 import state from '../../store/store';
 import { getDozentName, getLanguage, getSemester, Lang, Semester, getLangImage, getSemesterImage } from "../../utils/ModulExtractor";
+import { customId, extendToModul, stringToModul } from '../../utils/CustomModul';
 
 const props = defineProps({
   id: {
@@ -29,6 +30,9 @@ const props = defineProps({
 })
 
 const modul = computed(() => {
+  if (props.id.startsWith(customId)) {
+    return extendToModul(stringToModul(props.id))
+  }
   return state().getModulById(props.id)
 })
 
