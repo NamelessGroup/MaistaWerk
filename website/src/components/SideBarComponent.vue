@@ -80,10 +80,12 @@
           </button>
 
           <RouterLink
-            :to="goalRoute"
+            :to="goalRoute ?? '/'"
             class="flex items-center w-full border rounded-md border-primary-500 bg-primary-700 p-1 gap-2"
           >
-            {{goalRouteText}}
+            <img class="h-5" v-if="goalRouteText == 'Modulwahl'" src="../assets/eye-dropper-solid.svg" />
+            <img class="h-5" v-else src="../assets/table-columns-solid.svg" />
+            <div>{{goalRouteText}}</div>
           </RouterLink>
         </div>
       </div>
@@ -227,24 +229,24 @@ function shortenSemesterName(name: string) {
 const goalRoute = computed(() => {
   const name = router.currentRoute.value.name;
   if (name == null) {
-    return "";
+    return null;
   }
   const route = router.getRoutes().find((route) => route.name !== name);
   if (route == null) {
-    return "";
+    return null;
   }
   return route;
 })
 
 const goalRouteText = computed(() => {
-  const name = router.currentRoute.value.name;
+  const name = goalRoute.value?.name;
   if (name == null) {
     return null;
   }
   if (name === "ModuleSelection") {
     return "Modulwahl";
   } else if (name === "SemesterOrganizer") {
-    return "Semester Organizer";
+    return "SemesterOrganizer";
   } 
   return ""
 })
