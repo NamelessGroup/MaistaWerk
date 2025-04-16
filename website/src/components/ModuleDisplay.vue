@@ -11,11 +11,11 @@
     <div class="grid grid-rows-[auto_auto] grid-cols-[auto_1fr_auto] gap-x-5">
       <div class="row-start-1 col-start-1">{{ modul.lp }} LP</div>
       <div class="row-start-2 col-start-1">
-        {{ getDozentName() }}
+        {{ getDozentName(modul) }}
       </div>
       <div class="row-start-1 row-span-2 col-start-2 flex items-center gap-x-5">
-        <img v-if="compLanguage != Lang.UNKNOWN" class="h-6 grayscale" :src="getLangImage(compLanguage)" />
-        <img v-if="compSemester != Semester.UNKNOWN" class="h-6 opacity-80" :src="getSemesterImage(compSemester)" />
+        <img v-if="getLanguage(modul) != Lang.UNKNOWN" class="h-6 grayscale" :src="getLangImage(getLanguage(modul))" />
+        <img v-if="getSemester(modul) != Semester.UNKNOWN" class="h-6 opacity-80" :src="getSemesterImage(getSemester(modul))" />
       </div>
       <div class="row-start-1 row-span-2 col-start-3 flex items-center" @click="e => clickedActionButton(e)">
         <img
@@ -34,15 +34,12 @@ import Modul from "../../../model/Module";
 import ModuleBase from "./ModuleBase.vue";
 import ModulPopUp from "./ModulPopUp.vue";
 import ModuleChosenState from "../model/ui/ModuleChosenState";
-import sunSVG from '../assets/sun-solid.svg'
-import snowflakeSVG from '../assets/snowflake-solid.svg'
 import plusSVG from '../assets/plus-solid.svg'
 import errorSVG from '../assets/circle-exclamation-solid.svg'
 import minusSVG from '../assets/minus-solid.svg'
-import germanyFlag from '../assets/germany.png'
-import ukFlag from '../assets/united-kingdom.png'
 import { areRestrictionFulfilled } from "../utils/choiceManagement";
 import state from "../store/store";
+import { getDozentName, getLanguage, getSemester, Lang, Semester, getLangImage, getSemesterImage } from "../utils/ModulExtractor";
 
 const props = defineProps({
   modul: {
@@ -87,61 +84,5 @@ function getActionButtonSource() {
   if (props.chosenState == ModuleChosenState.CHOSEN_IN_THIS) return minusSVG
   if (props.chosenState == ModuleChosenState.CHOSEN_IN_OTHER) return errorSVG
   return "";
-}
-
-enum Lang {
-  EN, DE, UNKNOWN
-}
-
-enum Semester {
-  WiSe, SoSe, UNKNOWN
-}
-
-const compLanguage = computed(() => {
-  if (props.modul.sprache.toLocaleLowerCase() == 'englisch') {
-    return Lang.EN
-  } else if (props.modul.sprache.toLocaleLowerCase() == 'deutsch') {
-    return Lang.DE
-  } else {
-    return Lang.UNKNOWN
-  }
-})
-
-function getLangImage(lang: Lang) {
-  switch (lang) {
-    case Lang.EN:
-      return ukFlag
-    case Lang.DE:
-      return germanyFlag
-    default:
-      return ''
-  }
-}
-
-const compSemester = computed(() => {
-  if (props.modul.turnus.toLocaleLowerCase().includes("winter")) {
-    return Semester.WiSe
-  } else if (props.modul.turnus.toLocaleLowerCase().includes("sommer")) {
-    return Semester.SoSe
-  } else {
-    return Semester.UNKNOWN
-  }
-})
-
-function getSemesterImage(semester: Semester) {
-  switch (semester) {
-    case Semester.WiSe:
-      return snowflakeSVG
-    case Semester.SoSe:
-      return sunSVG
-    default:
-      return ''
-  }
-}
-
-function getDozentName() {
-  const r = /((Prof|Dr|PD|TT-Prof|rer|nat|Dipl)\.?)+[ -](.* )([^ ]*)$/i.exec(props.modul.verantwortlicher)
-  if (r) return r[r.length - 1]
-  return props.modul.verantwortlicher
 }
 </script>

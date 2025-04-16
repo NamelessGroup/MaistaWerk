@@ -15,6 +15,7 @@ export interface ChosenState {
   chosenFachToModule: Map<string, [string, number][]>
   chosenModuleToTeilleistungenListe:Map<string,[string, number][]>
   chosenFaecher:Map<FachSlotNames, Fach>
+  semesterToModulListe: Map<number, string[]>
 }
 
 // Should store the data imported from the jsons

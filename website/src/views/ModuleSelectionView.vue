@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="gap-5 flex pr-2">
       <FachDisplayWithSelect class="flex-1 h-full" :slot="FachSlotNames.VT1" :faecher="state().getAllVertiefungsfaecher" />
       <FachDisplayWithSelect class="flex-1 h-full" :slot="FachSlotNames.VT2" :faecher="state().getAllVertiefungsfaecher" />
       <FachDisplay class="flex-1 h-full" :slot="FachSlotNames.WAHL" />

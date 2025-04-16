@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-primary-800 max-w-48 flex flex-col">
+  <div class="bg-primary-800 max-w-48 flex flex-col max-h-full">
     <div class="flex p-2">
       <div v-if="!collapsed" class="flex-1 text-xl font-bold">
         Übersicht<!-- Placeholder -->
@@ -9,7 +9,7 @@
       </button>
     </div>
 
-    <div v-if="!collapsed" class="space-y-3 flex-grow flex flex-col">
+    <div v-if="!collapsed" class="space-y-3 flex-grow flex flex-col overflow-y-auto">
       <div class="space-y-3 flex-grow">
         <ModuleBase class="m-2" :name="state().getTotalChosenLP + ' LP'">
           <div>
@@ -226,7 +226,6 @@ function shortenSemesterName(name: string) {
 
 const goalRoute = computed(() => {
   const name = router.currentRoute.value.name;
-  console.debug(name, router.getRoutes())
   if (name == null) {
     return "";
   }
@@ -234,7 +233,6 @@ const goalRoute = computed(() => {
   if (route == null) {
     return "";
   }
-  console.debug(route.path, route.name)
   return route;
 })
 
