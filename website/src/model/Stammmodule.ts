@@ -1,14 +1,14 @@
 const stammmodule = [
-  "Mensch-Maschine-Interaktion",
+  "Human Computer Interaction",
   "Formale Systeme",
-  "Telematik",
+  "Telematics",
   "Rechnerstrukturen",
-  "Softwaretechnik II",
+  "Software Engineering II",
   "Computergrafik",
-  "Robotik I - Einführung in die Robotik",
-  "Algorithmen II",
-  "Fortgeschrittene Künstliche Intelligenz",
-  "IT-Sicherheit"
+  "Robotics I - Introduction to Robotics",
+  "Algorithms II",
+  "Advanced Artificial Intelligence",
+  "IT Security"
 ]
 
 export default stammmodule
