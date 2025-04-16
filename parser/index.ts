@@ -7,7 +7,7 @@ import writeToFile from "./fileWriting";
 import parseMetaData from "./parseComponents/MetaDataParser";
 
 const MODULHANDBUCH_URL =
-  "https://www.informatik.kit.edu/downloads/stud/88-079-H-2023_v1_2024-09-19_de.html";
+  "https://www.informatik.kit.edu/downloads/stud/88-079-H-2023_v1_2025-04-16_de.html";
 const RESULT_BASE_FOLDER_NAME = "../website/src/data";
 const VERTIEFUNGSFACH_FILE_NAME = "vertiefung.json";
 const WAHLBEREICH_FILE_NAME = "wahlbereich.json";
@@ -38,7 +38,7 @@ console.log(`Fetched content in ${postFetchTime - startTime}ms`);
 
 console.log("Parsing Fach list...");
 const fachListeStart =
-  bodyParser.findChildIndexOfHeading(STRUCTURE_TABLE_HEADING) + 2;
+  bodyParser.findChildIndexOfHeading(STRUCTURE_TABLE_HEADING) + 3;
 const fachListeEnd = bodyParser.findChildIndexOfHeading(MODULE_HEADING);
 const fachListe = bodyParser
   .publicGetChildRange(fachListeStart, fachListeEnd)
