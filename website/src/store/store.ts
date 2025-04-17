@@ -24,8 +24,8 @@ const state = defineStore('state', {
             ueqPunkte: 2,
             chosenFachToModule: fachModulMap,
             chosenModuleToTeilleistungenListe: new Map<string, [string, number][]>(),
-            chosenFaecher: faecher
-
+            chosenFaecher: faecher,
+            semesterToModulListe: new Map<number, string[]>()
         },
         modulhandbuch: {
             vertiefungsfaecher: vertiefungsfaecherJson as unknown as Fach[],
@@ -96,7 +96,8 @@ const state = defineStore('state', {
                 ueqPunkte: this.choices.ueqPunkte,
                 chosenFachToModule: mapToRecord(this.choices.chosenFachToModule, k => k),
                 chosenFaecher: mapToRecord(this.choices.chosenFaecher, k => k.valueOf()),
-                chosenModuleToTeilleistungenListe: mapToRecord(this.choices.chosenModuleToTeilleistungenListe, k => k)
+                chosenModuleToTeilleistungenListe: mapToRecord(this.choices.chosenModuleToTeilleistungenListe, k => k),
+                semesterToModulListe: mapToRecord(this.choices.semesterToModulListe, k => k.toString())
             })
         }
     },
@@ -139,6 +140,12 @@ const state = defineStore('state', {
             if (!fach) throw "Select Fach first"
             const newContent = this.choices.chosenFachToModule.get(fach.name)?.filter(i => i[0] !== id) ?? []
             this.choices.chosenFachToModule.set(fach.name, newContent)
+
+            const semesterKeys = this.choices.semesterToModulListe.keys()
+            for (const semesterKey of semesterKeys) {
+                const newContent = this.choices.semesterToModulListe.get(semesterKey)?.filter(i => i !== id) ?? []
+                this.choices.semesterToModulListe.set(semesterKey, newContent)
+            }
         },
         addTeilleistung(modulId: string, teillesitungsId: string, wahlbereichsIndex: number) {
             this.choices.chosenModuleToTeilleistungenListe.get(modulId)?.push([teillesitungsId, wahlbereichsIndex])
@@ -155,7 +162,8 @@ const state = defineStore('state', {
                 ueqPunkte: recordChoices.ueqPunkte,
                 chosenFachToModule: recordToMap(recordChoices.chosenFachToModule, k => k),
                 chosenFaecher: recordToMap(recordChoices.chosenFaecher, k => k as FachSlotNames),
-                chosenModuleToTeilleistungenListe: recordToMap(recordChoices.chosenModuleToTeilleistungenListe, k => k)
+                chosenModuleToTeilleistungenListe: recordToMap(recordChoices.chosenModuleToTeilleistungenListe, k => k),
+                semesterToModulListe: recordChoices.semesterToModulListe !== undefined ? recordToMap(recordChoices.semesterToModulListe, k => Number(k)) : new Map<number, string[]>()
             }
         }
     }
