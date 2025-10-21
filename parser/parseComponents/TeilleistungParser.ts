@@ -1,6 +1,6 @@
 import { HTMLElement, HTMLTableElement } from "happy-dom";
 import DomParser from "../domParser";
-import { getMetadataRow, getVerantwortlicher } from "./ModulTeilleistungCommon";
+import { extractLP, getMetadataRow, getVerantwortlicher } from "./ModulTeilleistungCommon";
 import Teilleistung, { TeilleistungMetadata } from "../../model/Teilleistung";
 
 /**
@@ -42,7 +42,7 @@ export default function parseTeilleistungen(
 function getMetadata(container: HTMLElement): TeilleistungMetadata {
   return {
     teilleistungsart: getMetadataRow(container.children[0]),
-    lp: Number(getMetadataRow(container.children[1])),
+    lp: extractLP(getMetadataRow(container.children[1])),
     turnus: getMetadataRow(container.children[3]),
   };
 }
