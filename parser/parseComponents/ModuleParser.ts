@@ -2,7 +2,7 @@ import { HTMLElement, HTMLTableElement } from "happy-dom";
 import DomParser from "../domParser";
 import Module, { ModuleMetadata } from "../../model/Module";
 import parseWahlbereicheTable from "./WahlbereicheParser";
-import { getMetadataRow, getVerantwortlicher } from "./ModulTeilleistungCommon";
+import { extractLP, getMetadataRow, getVerantwortlicher } from "./ModulTeilleistungCommon";
 
 /**
  * @param container Container containing all the divs that represent modules
@@ -45,7 +45,7 @@ export default function parseModule(container: HTMLElement): Module[] {
  */
 function getMetadata(container: HTMLElement): ModuleMetadata {
   return {
-    lp: Number(getMetadataRow(container.children[0])),
+    lp: extractLP(getMetadataRow(container.children[0])),
     turnus: getMetadataRow(container.children[2]),
     dauer: Number(getMetadataRow(container.children[3]).split(" ")[0]),
     sprache: getMetadataRow(container.children[4]),
