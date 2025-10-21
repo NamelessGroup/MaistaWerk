@@ -1,8 +1,11 @@
 <template>
-<div class="bg-primary-800 rounded-md border border-primary-500 flex flex-col overflow-hidden">
+<div class="bg-primary-800 rounded-md border border-primary-500 flex flex-col md:overflow-hidden">
   <div class="p-2">
     <div class="flex">
-      <h1 class="font-bold text-xl flex-1">{{ slot }}</h1>
+      <h1 class="font-bold text-xl flex-1 flex gap-2 items-center" @click="switchCollapsed()">
+        <img class="h-4 md:hidden" :src="collapsed ? chevronDownSvg : chevronUpSvg" >
+        {{ slot }}
+      </h1>
       <div>
         <img :src="filterSVG" class="h-6 cursor-pointer" @click="showFilter = !showFilter" ref="filterElement" />
         <FilterComponent v-if="showFilter" v-model:filter="filterState" v-model:sorting="sortingState" class="absolute" :class="showFilterLeft ? 'translate-x-[-19.5rem]' : ''" />
@@ -11,7 +14,7 @@
     <div>{{getRestrictionString(fach ?? {}, lpListForFach)}}</div>
     <slot></slot>
   </div>
-  <div class="overflow-y-auto flex-grow">
+  <div v-if="!collapsed" class="overflow-y-auto flex-grow">
     <div class="min-h-6" v-if="!$slots.default"><!--Empty space--></div>
     <WahlbereichList :slot="slot" :filter="filterState" :sorting="sortingState" />
   </div>
@@ -28,6 +31,8 @@ import filterSVG from '../assets/filter-solid.svg';
 import FilterComponent from './FilterComponent.vue';
 import { FilterState } from '../model/ui/FilterState';
 import { SortingOptions, SortingState } from '../model/ui/SortingState';
+import chevronDownSvg from '../assets/chevron-down-solid-full.svg';
+import chevronUpSvg from '../assets/chevron-up-solid-full.svg';
 
 const props = defineProps({
   slot: {
@@ -35,6 +40,13 @@ const props = defineProps({
     required: true
   }
 })
+
+const collapsed = ref(window.matchMedia('(max-width: 768px)').matches);
+function switchCollapsed() {
+  // Do not switch on large screen
+  if (!window.matchMedia('(max-width: 768px)').matches) return;
+  collapsed.value = !collapsed.value;
+}
 
 const fach = computed(() => state().getFach(props.slot))
 
