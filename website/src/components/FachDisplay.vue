@@ -33,6 +33,7 @@ import { FilterState } from '../model/ui/FilterState';
 import { SortingOptions, SortingState } from '../model/ui/SortingState';
 import chevronDownSvg from '../assets/chevron-down-solid-full.svg';
 import chevronUpSvg from '../assets/chevron-up-solid-full.svg';
+import { isMobile } from '../utils/uiUtils';
 
 const props = defineProps({
   slot: {
@@ -41,10 +42,10 @@ const props = defineProps({
   }
 })
 
-const collapsed = ref(window.matchMedia('(max-width: 768px)').matches);
+const collapsed = ref(isMobile());
 function switchCollapsed() {
   // Do not switch on large screen
-  if (!window.matchMedia('(max-width: 768px)').matches) return;
+  if (!isMobile()) return;
   collapsed.value = !collapsed.value;
 }
 

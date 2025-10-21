@@ -13,6 +13,15 @@
 import { RouterView } from 'vue-router';
 import SideBarComponent from './components/SideBarComponent.vue';
 import { ref } from 'vue';
+import { router } from './router';
+import { isMobile } from './utils/uiUtils';
 
-const sidebarCollapsed = ref(window.matchMedia('(max-width: 768px)').matches);
+const sidebarCollapsed = ref(isMobile());
+
+// collapse sidebar on mobile when changing views
+router.afterEach(() => {
+  if (isMobile()) {
+    sidebarCollapsed.value = true;
+  }
+});
 </script>
