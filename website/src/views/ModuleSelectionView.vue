@@ -1,9 +1,9 @@
 <template>
-    <div class="gap-5 flex pr-2">
-      <FachDisplayWithSelect class="flex-1 h-full" :slot="FachSlotNames.VT1" :faecher="state().getAllVertiefungsfaecher" />
-      <FachDisplayWithSelect class="flex-1 h-full" :slot="FachSlotNames.VT2" :faecher="state().getAllVertiefungsfaecher" />
-      <FachDisplay class="flex-1 h-full" :slot="FachSlotNames.WAHL" />
-      <FachDisplayWithSelect class="flex-1 h-full" :slot="FachSlotNames.EF" :faecher="state().getAllErgaenzungsfaecher" />
+    <div class="gap-5 flex md:pr-2 flex-col md:flex-row overflow-scroll md:overflow-hidden">
+      <FachDisplayWithSelect class="md:flex-1 md:h-full" :slot="FachSlotNames.VT1" :faecher="state().getAllVertiefungsfaecher" />
+      <FachDisplayWithSelect class="md:flex-1 md:h-full" :slot="FachSlotNames.VT2" :faecher="state().getAllVertiefungsfaecher" />
+      <FachDisplay class="md:flex-1 md:h-full" :slot="FachSlotNames.WAHL" />
+      <FachDisplayWithSelect class="md:flex-1 md:h-full" :slot="FachSlotNames.EF" :faecher="state().getAllErgaenzungsfaecher" />
     </div>
 </template>
 

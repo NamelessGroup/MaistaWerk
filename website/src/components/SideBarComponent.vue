@@ -1,13 +1,13 @@
 <template>
-  <div class="bg-primary-800 max-w-48 flex flex-col max-h-full">
-    <div class="flex p-2">
-      <div v-if="!collapsed" class="flex-1 text-xl font-bold">
-        Übersicht<!-- Placeholder -->
+  <div class="bg-primary-800 max-w-full md:max-w-48 flex flex-col max-h-full">
+    <button class="flex p-2"  @click="collapsed = !collapsed">
+      <div class="text-xl font-bold">
+        <span v-if="collapsed" class="block md:hidden">MaistaWerk</span>
+        <span v-if="!collapsed">Übersicht</span>
       </div>
-      <button @click="collapsed = !collapsed">
-        <img class="h-5" src="../assets/bars-solid.svg" />
-      </button>
-    </div>
+      <div class="flex-1"><!-- Placeholder --></div>
+      <img class="h-5" src="../assets/bars-solid.svg" />
+    </button>
 
     <div v-if="!collapsed" class="space-y-3 flex-grow flex flex-col overflow-y-auto">
       <div class="space-y-3 flex-grow">
@@ -116,7 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import ModuleBase from "./ModuleBase.vue";
 import state from "../store/store";
 import stammmodule from "../model/Stammmodule";
@@ -150,7 +150,7 @@ const semesterLP = computed(() => {
   return { soSe, wiSe }
 })
 
-const collapsed = ref(false);
+const collapsed = defineModel<boolean>('collapsed', { default: false });
 
 const minUeQLP = 2;
 const maxUeQLP = 6;
