@@ -35,7 +35,14 @@ const props = defineProps({
   }
 })
 
-const name = ref('Semester ' + props.id)
+const name = computed<string>({
+  get() {
+    return state().getSemesterName(props.id)
+  },
+  set(value: string) {
+    state().setSemesterName(props.id, value)
+  }
+})
 
 const list = ref<string[]>([])
 
