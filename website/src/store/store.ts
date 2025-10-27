@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import State from "./state";
+import State, { ChosenState } from "./state";
 import Fach from "../../../model/Fach";
 import Modul from "../../../model/Module";
 import Teilleistung from "../../../model/Teilleistung";
@@ -12,6 +12,9 @@ import ergaenzugsfaecherJson from "../data/erganzungsfach.json"
 import vertiefungsfaecherJson from "../data/vertiefung.json"
 import FachSlotNames from "../model/FachSlotNames";
 import isPflichtbereich from "../utils/PflichtbereichChecker.ts";
+import { verifyLoadedChoices } from "./loadVerifier.ts";
+import { router } from "../router/index.ts";
+import { getAllModules, getAllTeillesitungen } from "./stateUtil.ts";
 
 const state = defineStore('state', {
     state: (): State => {
@@ -34,6 +37,10 @@ const state = defineStore('state', {
             module: arrayToMap<Modul>(moduleJson as unknown as Modul[], (v) => v.id),
             teilleistungen: arrayToMap<Teilleistung>(teilleistungJson as unknown as Teilleistung[], (v) => v.id),
             metaData: metadataJson
+        },
+        errors: {
+            errors: undefined,
+            errorFullChoices: undefined
         }
     }},
     getters: {
@@ -42,11 +49,11 @@ const state = defineStore('state', {
         },
         // returns the ids of all chosen modules
         getAllChosenModule(): string[] {
-            return [...this.choices.chosenFachToModule.values()].flat().map(i => i[0] as string)
+            return getAllModules(this.choices)
         },
         // returns all chosen teilleistungen
         getChosenTeilleistungen(): string[] {
-            return [...this.choices.chosenModuleToTeilleistungenListe].flat().map(i => i[0] as string)
+            return getAllTeillesitungen(this.choices)
         },
         // returns the chosen teilleistugen for the given module in the given wahlbereich
         getChosenTeilleistungenForModul: (state: State) => (modulId: string, wahlbereichIndex: number): string[] => {
@@ -158,12 +165,21 @@ const state = defineStore('state', {
         // for saving and restoring
         loadChoicesFromJsonString(json: string) {
             const recordChoices = JSON.parse(json)
-            this.choices = {
+            const newChoices: ChosenState = {
                 ueqPunkte: recordChoices.ueqPunkte,
                 chosenFachToModule: recordToMap(recordChoices.chosenFachToModule, k => k),
                 chosenFaecher: recordToMap(recordChoices.chosenFaecher, k => k as FachSlotNames),
                 chosenModuleToTeilleistungenListe: recordToMap(recordChoices.chosenModuleToTeilleistungenListe, k => k),
                 semesterToModulListe: recordChoices.semesterToModulListe !== undefined ? recordToMap(recordChoices.semesterToModulListe, k => Number(k)) : new Map<number, string[]>()
+            }
+
+            this.errors.errors = verifyLoadedChoices(newChoices)
+            if (this.errors.errors !== undefined && this.errors.errors.length > 0) {
+                console.error("Errors found while loading choices:", this.errors)
+                this.errors.errorFullChoices = newChoices
+                router.push({name: 'Error'})
+            } else {
+                this.choices = newChoices
             }
         }
     }

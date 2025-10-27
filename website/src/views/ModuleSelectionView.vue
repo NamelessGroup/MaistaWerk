@@ -12,4 +12,5 @@ import state from '../store/store';
 import FachDisplayWithSelect from '../components/FachDisplayWithSelect.vue';
 import FachDisplay from '../components/FachDisplay.vue';
 import FachSlotNames from '../model/FachSlotNames';
+console.log(JSON.stringify(state().choices))
 </script>
