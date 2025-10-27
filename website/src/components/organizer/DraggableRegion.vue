@@ -9,9 +9,9 @@
     <div class="overflow-y-auto flex-grow mb-1" :class="{ 'max-h-6 min-h-4': collapsed,
       'min-h-10': !collapsed
      }">
-      <VueDraggableNext 
-        class="min-h-full space-y-2 px-1" 
-        :list="list" 
+      <VueDraggableNext
+        class="min-h-full space-y-2 px-1"
+        :list="list"
         :group="{name: 'draggable', put: true, pull: true}"
       >
         <DraggableModule
@@ -48,7 +48,14 @@ function switchCollapsed() {
   collapsed.value = !collapsed.value;
 }
 
-const name = ref('Semester ' + props.id)
+const name = computed<string>({
+  get() {
+    return state().getSemesterName(props.id)
+  },
+  set(value: string) {
+    state().setSemesterName(props.id, value)
+  }
+})
 
 const list = ref<string[]>([])
 

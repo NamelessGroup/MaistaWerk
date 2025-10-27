@@ -24,3 +24,11 @@ export function getVerantwortlicher(table: HTMLElement): string {
   }
   throw "No verantwortlicher found: " + table.innerHTML
 }
+
+export function extractLP(lpString: string): number {
+  const lpMatch = lpString.match(/(\d+)\s*(LP)?/);
+  if (lpMatch) {
+    return Number(lpMatch[1]);
+  }
+  throw new Error(`Could not extract LP from string: ${lpString}`);
+}
