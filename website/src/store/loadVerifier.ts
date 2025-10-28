@@ -47,6 +47,7 @@ export function verifyLoadedChoices(choices: ChosenState) {
       for (const bereich of modul.wahlbereiche) {
         const teilleistungen = bereich.modulliste
         for (const teilleistung of teilleistungen) {
+          console.log(mId, teilleistung)
           try {
             state().getTeilleistungById(teilleistung)
           } catch (e) {
@@ -71,6 +72,14 @@ export function removeErrors(choices: ChosenState, errors:LoadError[]): ChosenSt
   for (const fach of faecher) {
     const filteredModules = choices.chosenFachToModule.get(fach)?.filter(([moduleId, _]) => !modulErrors.includes(moduleId));
     choices.chosenFachToModule.set(fach, filteredModules || []);
+  }
+  const semester = Array.from(choices.semesterToModulListe.keys());
+  for (const sem of semester) {
+    const filteredModules = choices.semesterToModulListe.get(sem)?.filter((moduleId) => !modulErrors.includes(moduleId));
+    choices.semesterToModulListe.set(sem, filteredModules || []);
+  }
+  for (const mError of modulErrors) {
+    choices.chosenModuleToTeilleistungenListe.delete(mError);
   }
   return choices
 }

@@ -63,6 +63,5 @@ function fixErrors() {
   state().choices = removeErrors(state().errors.errorFullChoices!, state().errors.errors!)
   router.push('/')
 }
-console.log(state().errors.errorFullChoices)
 
 </script>

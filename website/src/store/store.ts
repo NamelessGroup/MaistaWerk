@@ -227,7 +227,6 @@ function mapToRecord<K,V>(map: Map<K,V>, keyToString: ((k:K)=>string)): Record<s
 
 function fachNameMatcher(shortenedName: string, fachName: string): boolean {
     const r = fachName.toLowerCase().includes(shortenedName.toLowerCase())
-    console.log(`Matching ${shortenedName} with ${fachName}: ${r}`)
     return r
 }
 
