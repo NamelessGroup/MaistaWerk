@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-y-5 w-full h-full">
-        <div class="min-h-3/4 max-h-3/4 h-3/4 max-w-full overflow-x-auto flex gap-x-5">
+        <div class="min-h-3/4 max-h-3/4 h-3/4 max-w-full overflow-auto flex flex-col md:flex-row gap-y-2 md:gap-x-5">
             <DraggableRegion 
                 v-for="i in semesterCount"
                 :key="i"

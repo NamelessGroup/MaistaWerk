@@ -28,7 +28,8 @@ const state = defineStore('state', {
             chosenFachToModule: fachModulMap,
             chosenModuleToTeilleistungenListe: new Map<string, [string, number][]>(),
             chosenFaecher: faecher,
-            semesterToModulListe: new Map<number, string[]>()
+            semesterToModulListe: new Map<number, string[]>(),
+            semesterNames: new Map<number, string>()
         },
         modulhandbuch: {
             vertiefungsfaecher: vertiefungsfaecherJson as unknown as Fach[],
@@ -104,8 +105,13 @@ const state = defineStore('state', {
                 chosenFachToModule: mapToRecord(this.choices.chosenFachToModule, k => k),
                 chosenFaecher: mapToRecord(this.choices.chosenFaecher, k => k.valueOf()),
                 chosenModuleToTeilleistungenListe: mapToRecord(this.choices.chosenModuleToTeilleistungenListe, k => k),
-                semesterToModulListe: mapToRecord(this.choices.semesterToModulListe, k => k.toString())
+                semesterToModulListe: mapToRecord(this.choices.semesterToModulListe, k => k.toString()),
+                semesterNames: mapToRecord(this.choices.semesterNames, k => k.toString())
             })
+        },
+
+        getSemesterName: (state: State) => (semester: number): string => {
+            return state.choices.semesterNames.get(semester) ?? `Semester ${semester}`
         }
     },
     actions: {
@@ -170,7 +176,8 @@ const state = defineStore('state', {
                 chosenFachToModule: recordToMap(recordChoices.chosenFachToModule, k => k),
                 chosenFaecher: recordToMap(recordChoices.chosenFaecher, k => k as FachSlotNames),
                 chosenModuleToTeilleistungenListe: recordToMap(recordChoices.chosenModuleToTeilleistungenListe, k => k),
-                semesterToModulListe: recordChoices.semesterToModulListe !== undefined ? recordToMap(recordChoices.semesterToModulListe, k => Number(k)) : new Map<number, string[]>()
+                semesterToModulListe: recordChoices.semesterToModulListe !== undefined ? recordToMap(recordChoices.semesterToModulListe, k => Number(k)) : new Map<number, string[]>(),
+                semesterNames: recordChoices.semesterNames !== undefined ? recordToMap(recordChoices.semesterNames, k => Number(k)) : new Map<number, string>()
             }
 
             this.errors.errors = verifyLoadedChoices(newChoices)
@@ -181,6 +188,10 @@ const state = defineStore('state', {
             } else {
                 this.choices = newChoices
             }
+        },
+
+        setSemesterName(semester: number, name: string) {
+            this.choices.semesterNames.set(semester, name)
         }
     }
 })
