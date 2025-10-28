@@ -1,4 +1,4 @@
-import Fach from "../../../model/Fach"
+import Fach, { SavedFach } from "../../../model/Fach"
 import { MetaData } from "../../../model/MetaData.ts";
 import Modul from "../../../model/Module"
 import Teilleistung from "../../../model/Teilleistung"
@@ -16,7 +16,7 @@ export interface ChosenState {
   ueqPunkte: number
   chosenFachToModule: Map<string, [string, number][]>
   chosenModuleToTeilleistungenListe:Map<string,[string, number][]>
-  chosenFaecher:Map<FachSlotNames, Fach>
+  chosenFaecher:Map<FachSlotNames, SavedFach>
   semesterToModulListe: Map<number, string[]>
   semesterNames: Map<number, string>
 }

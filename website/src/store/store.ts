@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import State, { ChosenState } from "./state";
-import Fach from "../../../model/Fach";
+import Fach, { SavedFach } from "../../../model/Fach";
 import Modul from "../../../model/Module";
 import Teilleistung from "../../../model/Teilleistung";
 
@@ -18,8 +18,8 @@ import { getAllModules, getAllTeillesitungen } from "./stateUtil.ts";
 
 const state = defineStore('state', {
     state: (): State => {
-        const faecher = new Map<FachSlotNames, Fach>()
-        faecher.set(FachSlotNames.WAHL, wahlbereichJson as unknown as Fach)
+        const faecher = new Map<FachSlotNames, SavedFach>()
+        faecher.set(FachSlotNames.WAHL, { name: wahlbereichJson.name })
         const fachModulMap = new Map<string, [string, number][]>()
         fachModulMap.set(faecher.get(FachSlotNames.WAHL)?.name ?? '', [])
         return {
@@ -62,7 +62,9 @@ const state = defineStore('state', {
         },
         // returns all teilleistungen for the chosen module
         getFach: (state: State) => (fach: FachSlotNames): Fach | undefined => {
-            return state.choices.chosenFaecher.get(fach)
+            const chosenFachName = state.choices.chosenFaecher.get(fach)?.name
+            if (!chosenFachName) return undefined
+            return getFachFromName(chosenFachName)
         },
         // returns the ids of the modules chosen in the given fach and the given wahlbereich
         getChosenFromWahlbereichAndFach: (state: State) => (fach: FachSlotNames, wahlbereichIndex: number): string[] => {
@@ -70,7 +72,8 @@ const state = defineStore('state', {
         },
         // returns the sum of all lp
         getTotalChosenLP(): number {
-            return [...this.choices.chosenFaecher.values()].map(i => Math.min(i.maxLP, (this.choices.chosenFachToModule.get(i.name)?.map(i => this.getModulById(i[0]).lp).reduce((a,b) => a+b, 0) ?? Infinity))).reduce((a,b)=> a+b, 0) + this.choices.ueqPunkte + 30
+            const chosenFaecher = [...this.choices.chosenFaecher.values()].map(f => getFachFromName(f.name)).filter((f): f is Fach => f !== undefined)
+            return chosenFaecher.map(i => Math.min(i.maxLP, (this.choices.chosenFachToModule.get(i.name)?.map(i => this.getModulById(i[0]).lp).reduce((a,b) => a+b, 0) ?? Infinity))).reduce((a,b)=> a+b, 0) + this.choices.ueqPunkte + 30
         },
         getMaximumLP(): number {
             return 120
@@ -112,7 +115,7 @@ const state = defineStore('state', {
 
         getSemesterName: (state: State) => (semester: number): string => {
             return state.choices.semesterNames.get(semester) ?? `Semester ${semester}`
-        }
+        },
     },
     actions: {
         setUeQLP(punkte: number) {
@@ -126,7 +129,7 @@ const state = defineStore('state', {
                 this.choices.chosenFachToModule.delete(currentFach.name)
                 module.forEach(i => this.choices.chosenModuleToTeilleistungenListe.delete(i))
             }
-            this.choices.chosenFaecher.set(fachSlot, fach)
+            this.choices.chosenFaecher.set(fachSlot, {name:fach.name})
             this.choices.chosenFachToModule.set(fach.name, [])
             fach.wahlbereiche.forEach((w,i) => {
                 if (isPflichtbereich(w, this.getModulById)) {
@@ -220,4 +223,20 @@ function mapToRecord<K,V>(map: Map<K,V>, keyToString: ((k:K)=>string)): Record<s
         record[keyToString(k)] = v
     }
     return record
+}
+
+function fachNameMatcher(shortenedName: string, fachName: string): boolean {
+    const r = fachName.toLowerCase().includes(shortenedName.toLowerCase())
+    console.log(`Matching ${shortenedName} with ${fachName}: ${r}`)
+    return r
+}
+
+function getFachFromName (name: string): Fach | undefined {
+    if(fachNameMatcher(name, state().modulhandbuch.wahlbereich.name)) {
+        return state().modulhandbuch.wahlbereich
+    }
+    const vertiefung = state().modulhandbuch.vertiefungsfaecher.find(i => fachNameMatcher(name, i.name))
+    if (vertiefung) return vertiefung
+    const erg = state().modulhandbuch.ergaenzungsfaecher.find(i => fachNameMatcher(name, i.name))
+    if (erg) return erg
 }
