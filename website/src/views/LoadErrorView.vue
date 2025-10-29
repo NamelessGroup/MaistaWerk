@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-2 grid-rows-[auto_auto_auto] gap-5 pr-2">
+  <div class="grid grid-cols-2 grid-rows-[auto_auto_auto] gap-5">
     <ErrorList
       heading="Einige Module/Teillesitungen wurden nicht gefunden:"
       :error-list="errorList"
@@ -24,15 +24,11 @@
       <template #header>Module entfernen und fortfahren</template>
       <template #default>
         <button
-          v-if="!errorList.some(e => e.type === 'Teilleistung')"
           @click="fixErrors()"
           class="border rounded-md p-1 border-primary-500 bg-primary-700 space-y-2 w-full"
         >
           Automatisch Entfernen
         </button>
-        <div v-else>
-          Fehler mit fehlenden Teilleistungen können nicht behoben werden
-        </div>
       </template>
     </ContainerComponent>
   </div>

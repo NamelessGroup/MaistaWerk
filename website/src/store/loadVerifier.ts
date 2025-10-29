@@ -44,15 +44,12 @@ export function verifyLoadedChoices(choices: ChosenState) {
       console.log(mId)
       const modul = state().getModulById(mId);
       console.log(modul)
-      for (const bereich of modul.wahlbereiche) {
-        const teilleistungen = bereich.modulliste
-        for (const teilleistung of teilleistungen) {
-          console.log(mId, teilleistung)
-          try {
-            state().getTeilleistungById(teilleistung)
-          } catch (e) {
-            teilleistungErrors.push(buildTeilleistungNotFoundError(teilleistung, modul))
-          }
+      const chosenTeilleistungen = choices.chosenModuleToTeilleistungenListe.get(mId) || [];
+      for (const teilleistung of chosenTeilleistungen) {
+        try {
+          state().getTeilleistungById(teilleistung[0]);
+        } catch (e) {
+          teilleistungErrors.push(buildTeilleistungNotFoundError(teilleistung[0], modul));
         }
       }
     } catch (e) {
@@ -80,6 +77,13 @@ export function removeErrors(choices: ChosenState, errors:LoadError[]): ChosenSt
   }
   for (const mError of modulErrors) {
     choices.chosenModuleToTeilleistungenListe.delete(mError);
+  }
+
+  const teilleistungErrors = errors.filter(e => e.type === 'Teilleistung') as TeilleistungLoadError[];
+  for (const tError of teilleistungErrors) {
+    const teilleistungen = choices.chosenModuleToTeilleistungenListe.get(tError.modulId) || [];
+    const filteredTeilleistungen = teilleistungen.filter(([tId, _]) => tId !== tError.missingId);
+    choices.chosenModuleToTeilleistungenListe.set(tError.modulId, filteredTeilleistungen);
   }
   return choices
 }

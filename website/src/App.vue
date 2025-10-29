@@ -3,7 +3,7 @@
     'grid-rows-1': !sidebarCollapsed
   }">
     <RouterView class="h-full row-start-2 col-start-1 md:row-start-1 md:col-start-1 overflow-hidden p-2" :class="{
-      'hidden md:flex': !sidebarCollapsed,
+      'sm-hidden': !sidebarCollapsed,
     }" />
     <SideBarComponent class="row-start-1 col-start-1 md:row-start-1 md:col-start-2" v-model:collapsed="sidebarCollapsed" />
   </div>
@@ -25,3 +25,12 @@ router.afterEach(() => {
   }
 });
 </script>
+
+<style scoped>
+@media (max-width: 768px) {
+  .sm-hidden {
+    display: none;
+  }
+}
+
+</style>
