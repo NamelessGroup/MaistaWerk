@@ -36,14 +36,11 @@ function buildTeilleistungNotFoundError(id: string, modul: Modul): TeilleistungL
 
 export function verifyLoadedChoices(choices: ChosenState) {
   const allModules = getAllModules(choices);
-  console.log(choices, allModules)
   const moduleErrors: LoadError[] = [] 
   const teilleistungErrors: LoadError[] = []
   for (const mId of allModules) {
     try {
-      console.log(mId)
       const modul = state().getModulById(mId);
-      console.log(modul)
       const chosenTeilleistungen = choices.chosenModuleToTeilleistungenListe.get(mId) || [];
       for (const teilleistung of chosenTeilleistungen) {
         try {
