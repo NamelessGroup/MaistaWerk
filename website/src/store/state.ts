@@ -1,12 +1,14 @@
-import Fach from "../../../model/Fach"
+import Fach, { SavedFach } from "../../../model/Fach"
 import { MetaData } from "../../../model/MetaData.ts";
 import Modul from "../../../model/Module"
 import Teilleistung from "../../../model/Teilleistung"
 import FachSlotNames from "../model/FachSlotNames.ts";
+import { LoadError } from "./loadVerifier.ts";
 
 export default interface State {
   choices: ChosenState
-  modulhandbuch: Modulhandbuch
+  modulhandbuch: Modulhandbuch,
+  errors: ErrorState
 }
 
 // Should store the choices of the user
@@ -14,7 +16,7 @@ export interface ChosenState {
   ueqPunkte: number
   chosenFachToModule: Map<string, [string, number][]>
   chosenModuleToTeilleistungenListe:Map<string,[string, number][]>
-  chosenFaecher:Map<FachSlotNames, Fach>
+  chosenFaecher:Map<FachSlotNames, SavedFach>
   semesterToModulListe: Map<number, string[]>
   semesterNames: Map<number, string>
 }
@@ -28,3 +30,10 @@ export interface Modulhandbuch {
   wahlbereich: Fach
   metaData: MetaData
 }
+
+interface _ErrorState<E,C> {
+  errors: E
+  errorFullChoices: C
+}
+
+export type ErrorState = _ErrorState<LoadError[], ChosenState> | _ErrorState<undefined, undefined>

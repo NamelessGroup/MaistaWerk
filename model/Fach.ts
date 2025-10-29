@@ -1,7 +1,10 @@
 import Wahlbereich from "./Wahlbereich";
 
-export default interface Fach {
-  name: string;
+export interface SavedFach {
+  name: string
+}
+
+export default interface Fach extends SavedFach {
   minLP: number;
   maxLP: number;
   wahlbereiche: Wahlbereich[];

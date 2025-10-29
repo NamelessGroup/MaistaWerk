@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
-import State from "./state";
-import Fach from "../../../model/Fach";
+import State, { ChosenState } from "./state";
+import Fach, { SavedFach } from "../../../model/Fach";
 import Modul from "../../../model/Module";
 import Teilleistung from "../../../model/Teilleistung";
 
@@ -12,11 +12,14 @@ import ergaenzugsfaecherJson from "../data/erganzungsfach.json"
 import vertiefungsfaecherJson from "../data/vertiefung.json"
 import FachSlotNames from "../model/FachSlotNames";
 import isPflichtbereich from "../utils/PflichtbereichChecker.ts";
+import { verifyLoadedChoices } from "./loadVerifier.ts";
+import { router } from "../router/index.ts";
+import { getAllModules, getAllTeillesitungen } from "./stateUtil.ts";
 
 const state = defineStore('state', {
     state: (): State => {
-        const faecher = new Map<FachSlotNames, Fach>()
-        faecher.set(FachSlotNames.WAHL, wahlbereichJson as unknown as Fach)
+        const faecher = new Map<FachSlotNames, SavedFach>()
+        faecher.set(FachSlotNames.WAHL, { name: wahlbereichJson.name })
         const fachModulMap = new Map<string, [string, number][]>()
         fachModulMap.set(faecher.get(FachSlotNames.WAHL)?.name ?? '', [])
         return {
@@ -35,6 +38,10 @@ const state = defineStore('state', {
             module: arrayToMap<Modul>(moduleJson as unknown as Modul[], (v) => v.id),
             teilleistungen: arrayToMap<Teilleistung>(teilleistungJson as unknown as Teilleistung[], (v) => v.id),
             metaData: metadataJson
+        },
+        errors: {
+            errors: undefined,
+            errorFullChoices: undefined
         }
     }},
     getters: {
@@ -43,11 +50,11 @@ const state = defineStore('state', {
         },
         // returns the ids of all chosen modules
         getAllChosenModule(): string[] {
-            return [...this.choices.chosenFachToModule.values()].flat().map(i => i[0] as string)
+            return getAllModules(this.choices)
         },
         // returns all chosen teilleistungen
         getChosenTeilleistungen(): string[] {
-            return [...this.choices.chosenModuleToTeilleistungenListe].flat().map(i => i[0] as string)
+            return getAllTeillesitungen(this.choices)
         },
         // returns the chosen teilleistugen for the given module in the given wahlbereich
         getChosenTeilleistungenForModul: (state: State) => (modulId: string, wahlbereichIndex: number): string[] => {
@@ -55,7 +62,9 @@ const state = defineStore('state', {
         },
         // returns all teilleistungen for the chosen module
         getFach: (state: State) => (fach: FachSlotNames): Fach | undefined => {
-            return state.choices.chosenFaecher.get(fach)
+            const chosenFachName = state.choices.chosenFaecher.get(fach)?.name
+            if (!chosenFachName) return undefined
+            return getFachFromName(chosenFachName)
         },
         // returns the ids of the modules chosen in the given fach and the given wahlbereich
         getChosenFromWahlbereichAndFach: (state: State) => (fach: FachSlotNames, wahlbereichIndex: number): string[] => {
@@ -63,7 +72,8 @@ const state = defineStore('state', {
         },
         // returns the sum of all lp
         getTotalChosenLP(): number {
-            return [...this.choices.chosenFaecher.values()].map(i => Math.min(i.maxLP, (this.choices.chosenFachToModule.get(i.name)?.map(i => this.getModulById(i[0]).lp).reduce((a,b) => a+b, 0) ?? Infinity))).reduce((a,b)=> a+b, 0) + this.choices.ueqPunkte + 30
+            const chosenFaecher = [...this.choices.chosenFaecher.values()].map(f => getFachFromName(f.name)).filter((f): f is Fach => f !== undefined)
+            return chosenFaecher.map(i => Math.min(i.maxLP, (this.choices.chosenFachToModule.get(i.name)?.map(i => this.getModulById(i[0]).lp).reduce((a,b) => a+b, 0) ?? Infinity))).reduce((a,b)=> a+b, 0) + this.choices.ueqPunkte + 30
         },
         getMaximumLP(): number {
             return 120
@@ -105,7 +115,7 @@ const state = defineStore('state', {
 
         getSemesterName: (state: State) => (semester: number): string => {
             return state.choices.semesterNames.get(semester) ?? `Semester ${semester}`
-        }
+        },
     },
     actions: {
         setUeQLP(punkte: number) {
@@ -119,7 +129,7 @@ const state = defineStore('state', {
                 this.choices.chosenFachToModule.delete(currentFach.name)
                 module.forEach(i => this.choices.chosenModuleToTeilleistungenListe.delete(i))
             }
-            this.choices.chosenFaecher.set(fachSlot, fach)
+            this.choices.chosenFaecher.set(fachSlot, {name:fach.name})
             this.choices.chosenFachToModule.set(fach.name, [])
             fach.wahlbereiche.forEach((w,i) => {
                 if (isPflichtbereich(w, this.getModulById)) {
@@ -164,13 +174,22 @@ const state = defineStore('state', {
         // for saving and restoring
         loadChoicesFromJsonString(json: string) {
             const recordChoices = JSON.parse(json)
-            this.choices = {
+            const newChoices: ChosenState = {
                 ueqPunkte: recordChoices.ueqPunkte,
                 chosenFachToModule: recordToMap(recordChoices.chosenFachToModule, k => k),
                 chosenFaecher: recordToMap(recordChoices.chosenFaecher, k => k as FachSlotNames),
                 chosenModuleToTeilleistungenListe: recordToMap(recordChoices.chosenModuleToTeilleistungenListe, k => k),
                 semesterToModulListe: recordChoices.semesterToModulListe !== undefined ? recordToMap(recordChoices.semesterToModulListe, k => Number(k)) : new Map<number, string[]>(),
                 semesterNames: recordChoices.semesterNames !== undefined ? recordToMap(recordChoices.semesterNames, k => Number(k)) : new Map<number, string>()
+            }
+
+            this.errors.errors = verifyLoadedChoices(newChoices)
+            if (this.errors.errors !== undefined && this.errors.errors.length > 0) {
+                console.error("Errors found while loading choices:", this.errors)
+                this.errors.errorFullChoices = newChoices
+                router.push({name: 'Error'})
+            } else {
+                this.choices = newChoices
             }
         },
 
@@ -204,4 +223,19 @@ function mapToRecord<K,V>(map: Map<K,V>, keyToString: ((k:K)=>string)): Record<s
         record[keyToString(k)] = v
     }
     return record
+}
+
+function fachNameMatcher(shortenedName: string, fachName: string): boolean {
+    const r = fachName.toLowerCase().includes(shortenedName.toLowerCase())
+    return r
+}
+
+function getFachFromName (name: string): Fach | undefined {
+    if(fachNameMatcher(name, state().modulhandbuch.wahlbereich.name)) {
+        return state().modulhandbuch.wahlbereich
+    }
+    const vertiefung = state().modulhandbuch.vertiefungsfaecher.find(i => fachNameMatcher(name, i.name))
+    if (vertiefung) return vertiefung
+    const erg = state().modulhandbuch.ergaenzungsfaecher.find(i => fachNameMatcher(name, i.name))
+    if (erg) return erg
 }

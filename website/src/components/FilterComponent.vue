@@ -213,7 +213,6 @@ const sortingDirection = computed({
     });
   }
 });
-console.log(sortingDirection.value, _sortingDirection.value);
 </script>
 
 <style scoped>
