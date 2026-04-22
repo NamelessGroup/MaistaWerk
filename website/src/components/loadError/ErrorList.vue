@@ -1,5 +1,5 @@
 <template>
-  <ContainerComponent class="col-span-2">
+  <ContainerComponent>
       <template #header>{{ heading }}</template>
 
       <template #default>
