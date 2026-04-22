@@ -80,12 +80,11 @@
           </button>
 
           <RouterLink
-            :to="goalRoute ?? '/'"
+            :to="goalRoute?.routeName ?? '/'"
             class="flex items-center w-full border rounded-md border-primary-500 bg-primary-700 p-1 gap-2"
           >
-            <img class="h-5" v-if="goalRouteText == 'Modulwahl'" src="../assets/eye-dropper-solid.svg" />
-            <img class="h-5" v-else src="../assets/table-columns-solid.svg" />
-            <div>{{goalRouteText}}</div>
+            <img class="h-5" :src="goalRoute?.icon" />
+            <div>{{goalRoute?.text}}</div>
           </RouterLink>
         </div>
       </div>
@@ -121,6 +120,8 @@ import ModuleBase from "./ModuleBase.vue";
 import state from "../store/store";
 import stammmodule from "../model/Stammmodule";
 import { router } from "../router";
+import tableSVG from "../assets/table-columns-solid.svg";
+import eyeSVG from "../assets/eye-dropper-solid.svg";
 
 const allModule = computed(() =>
   state().getAllChosenModule.map((modul) => state().getModulById(modul))
@@ -226,28 +227,15 @@ function shortenSemesterName(name: string) {
   return name.replace(/[Ww]intersemester/, "WiSe").replace(/[Ss]ommersemester/, "SoSe");
 }
 
-const goalRoute = computed(() => {
-  const name = router.currentRoute.value.name;
-  if (name == null) {
-    return null;
-  }
-  const route = router.getRoutes().find((route) => route.name !== name);
-  if (route == null) {
-    return null;
-  }
-  return route;
+type R = {routeName: string, text: string, icon: string}
+
+const routes = [
+  {routeName: "/", text: "Modulwahl", icon: eyeSVG},
+  {routeName: "/semesterOrganizer/", text: "SemesterOrganizer", icon: tableSVG},
+]
+const goalRoute = computed<R|null>(() => {
+  const currentRoute = router.currentRoute.value.path ?? ""
+  return routes.find(r => r.routeName != currentRoute) ?? null
 })
 
-const goalRouteText = computed(() => {
-  const name = goalRoute.value?.name;
-  if (name == null) {
-    return null;
-  }
-  if (name === "ModuleSelection") {
-    return "Modulwahl";
-  } else if (name === "SemesterOrganizer") {
-    return "SemesterOrganizer";
-  } 
-  return ""
-})
 </script>
