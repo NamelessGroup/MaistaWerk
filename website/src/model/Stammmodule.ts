@@ -1,14 +1,16 @@
 const stammmodule = [
-  "Human Computer Interaction",
-  "Formale Systeme",
-  "Telematics",
-  "Rechnerstrukturen",
-  "Software Engineering II",
-  "Computergrafik",
-  "Robotics I - Introduction to Robotics",
   "Algorithms II",
-  "Advanced Artificial Intelligence",
-  "IT Security"
+  "Computergrafik",
+  "Formale Systeme",
+  "Human Computer Interaction",
+  "IT Security",
+  // The two spaces are there in the name...
+  "Machine Learning  - Foundations and Algorithms",
+  "Multimodal Artificial Intelligence",
+  "Rechnerstrukturen",
+  "Robotics I - Introduction to Robotics",
+  "Software Engineering II",
+  "Telematics"
 ]
 
 export default stammmodule
