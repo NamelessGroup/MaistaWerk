@@ -174,9 +174,10 @@ const chosenSeminareECTS = computed(() =>
   ).reduce((acc, modul) => acc + modul.lp, 0)
 );
 
+const practikaKeyword = ["praktikum", "practical course", "practicalcourse"]
 const chosenPraktikaECTS = computed(() =>
   allModule.value.filter((modul) =>
-    modul.name.toLocaleLowerCase().includes("praktikum")
+    practikaKeyword.some(kw => modul.name.toLocaleLowerCase().includes(kw))
   ).reduce((acc, modul) => acc + modul.lp, 0)
 );
 
