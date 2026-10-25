@@ -7,7 +7,7 @@ import writeToFile from "./fileWriting";
 import parseMetaData from "./parseComponents/MetaDataParser";
 
 const MODULHANDBUCH_URL =
-  "https://www.informatik.kit.edu/downloads/stud/88-079-H-2023_v1_2026-04-15_de.html";
+  "https://www.informatik.kit.edu/downloads/stud/88-079-H-2023_v1_2026-09-09_de.html";
 const RESULT_BASE_FOLDER_NAME = "../website/src/data";
 const VERTIEFUNGSFACH_FILE_NAME = "vertiefung.json";
 const WAHLBEREICH_FILE_NAME = "wahlbereich.json";
